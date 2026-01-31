@@ -1,0 +1,65 @@
+# Planning and Reference Files
+ThePlan.md
+
+# Compiled binaries
+*.out
+*.exe
+a.out
+display
+ui_node
+computation_node
+
+# Object files
+*.o
+*.obj
+
+# Temporary files
+*~
+*.tmp
+*.temp
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows system files
+Thumbs.db
+Desktop.ini
+
+# Linux system files
+*~
+
+# MPI runtime files
+*.hosts
+mpirun.*
+
+# Docker files (until ready)
+Dockerfile*
+docker-compose.yml
+.dockerignore
+
+# Build directories
+build/
+bin/
+obj/
+
+# Log files
+*.log
+*.err
+*.out.log
+
+# Test output files
+results.csv
+output_*.csv
+
+# Personal notes
+notes.txt
+todo.txt
+*.notes
