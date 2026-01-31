@@ -101,6 +101,7 @@ void send_completion_signal(int total_operations){
     // Implementation goes here
 };
 
+
 void handle_completion(int total_operations){
     // Processes completion signal and generates final output
     // Implementation goes here
