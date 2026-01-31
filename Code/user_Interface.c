@@ -96,7 +96,6 @@ int send_computation_request(int target_rank, int operation_type, double operand
     return 0;
 };
 
-
 void send_completion_signal(int total_operations){
     // Notifies display node that all computations are complete
     // Implementation goes here
