@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <mpi.h>
 
 struct ComputationResult {
     int operation_type; //1:Addition, 2:Subtraction, 3:Multiplication, 4:Division
@@ -16,11 +17,13 @@ struct ComputationResult {
 void process_interactive_input(void);
 int process_csv_file(char* filename);
 int parse_csv_line(char* line, struct ComputationResult* info);
-int distribute_computation(int operation_type, double operand1, double operand2, int request_id);
-int send_computation_request(int target_rank, int operation_type, double operand1, double operand2, int request_id);
+void send_computation_request(struct ComputationResult info);
 void send_completion_signal(int total_operations);
 
 int main (int argc, char *argv[]) {
+    // Initialize MPI
+    MPI_Init(&argc, &argv);
+    
     if (argc > 1) {
         // CSV file provided
         printf("CSV file provided: %s\n", argv[1]);
@@ -30,6 +33,9 @@ int main (int argc, char *argv[]) {
         printf("No CSV file provided - interactive mode\n");
         process_interactive_input();
     }
+    
+    // Clean up MPI
+    MPI_Finalize();
     return 0;
 }
 
@@ -55,14 +61,13 @@ void process_interactive_input(){
             break;  
         }
         if (parse_csv_line(input, &info) == 0) {
-            distribute_computation(info.operation_type, info.operand1, info.operand2, info.request_id);
+            send_computation_request(info);
             info.request_id++;
         } else {
             printf("Invalid input format. Please try again.\n");
         }
     }
     send_completion_signal(info.request_id - 1);
-    return 0;
 }
 
 int process_csv_file(char* filename){
@@ -82,7 +87,7 @@ int process_csv_file(char* filename){
     while (fgets(line, sizeof(line), file)) {
         line_number++;
         if (parse_csv_line(line, &info) == 0) {
-            distribute_computation(info.operation_type, info.operand1, info.operand2, info.request_id);
+            send_computation_request(info);
             info.request_id++;
             total_operations++;
         } else {
@@ -118,16 +123,14 @@ int parse_csv_line(char* line, struct ComputationResult* info){
     return 0;
 };
 
-int distribute_computation(int operation_type, double operand1, double operand2, int request_id){
+void send_computation_request(struct ComputationResult info){
     // Sends computation request to appropriate computation node
-    printf("Distributing computation request ID %d: %lf, %lf, operation %d\n", request_id, operand1, operand2, operation_type);
-    return 0;
-};
-
-int send_computation_request(int target_rank, int operation_type, double operand1, double operand2, int request_id){
-    // Sends MPI message with computation request to specific node
-    printf("Sending computation request ID %d to node %d\n", request_id, target_rank);
-    return 0;
+    // Determine target node based on operation type (1-4 map to ranks 1-4)
+    int target_rank = info.operation_type;
+    
+    // Send the struct to the target computation node
+    int send_result = MPI_Send(&info, sizeof(struct ComputationResult), MPI_BYTE, 
+                               target_rank, 0, MPI_COMM_WORLD);
 };
 
 void send_completion_signal(int total_operations){

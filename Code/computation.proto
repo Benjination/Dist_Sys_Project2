@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package computation;
+
+// Service for computation operations
+service ComputationService {
+  rpc ProcessOperation(OperationRequest) returns (OperationResponse);
+}
+
+// Service for display operations
+service DisplayService {
+  rpc SaveResult(ResultRequest) returns (ResultResponse);
+  rpc NotifyComplete(CompletionRequest) returns (CompletionResponse);
+}
+
+// Request message for computation operations
+message OperationRequest {
+  int32 request_id = 1;
+  int32 operation_type = 2;  // 1:Add, 2:Subtract, 3:Multiply, 4:Divide
+  double operand1 = 3;
+  double operand2 = 4;
+}
+
+// Response message from computation
+message OperationResponse {
+  int32 request_id = 1;
+  double result = 2;
+  int32 status = 3;  // 0:Success, 1:Error
+  string error_message = 4;
+}
+
+// Request message for saving results
+message ResultRequest {
+  int32 request_id = 1;
+  double result = 2;
+  int32 status = 3;
+}
+
+// Response from display service
+message ResultResponse {
+  bool success = 1;
+}
+
+// Completion notification
+message CompletionRequest {
+  int32 total_operations = 1;
+}
+
+// Completion response
+message CompletionResponse {
+  bool acknowledged = 1;
+}
