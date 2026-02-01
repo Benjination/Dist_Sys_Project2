@@ -93,13 +93,8 @@ int parse_csv_line(char* line, struct ComputationResult* info){
 
 int distribute_computation(int operation_type, double operand1, double operand2, int request_id){
     // Sends computation request to appropriate computation node
-    // operation_type (1-4) maps directly to target_rank (1-4)
-    int target_rank = operation_type;
-    
-    printf("Distributing computation request ID %d: %lf, %lf, operation %d to rank %d\n", 
-           request_id, operand1, operand2, operation_type, target_rank);
-    
-    return send_computation_request(target_rank, operation_type, operand1, operand2, request_id);
+    printf("Distributing computation request ID %d: %lf, %lf, operation %d\n", request_id, operand1, operand2, operation_type);
+    return 0;
 };
 
 int send_computation_request(int target_rank, int operation_type, double operand1, double operand2, int request_id){
