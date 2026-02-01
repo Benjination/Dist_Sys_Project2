@@ -36,7 +36,34 @@ int main (int argc, char *argv[]) {
 
 void process_interactive_input(){
     // Prompts user for operations and sends to computation nodes
-};
+    struct ComputationResult info;
+    info.request_id = 1;
+    info.status = 0;
+    char input[100] = {0};
+
+    printf("Enter computations in the format: operand1,operand2,operation (+, -, *, /)\n");
+    printf("Type 'exit' to quit interactive mode.\n");
+    while (strncmp(input, "exit", 4) != 0) {
+        printf("Enter computation or type 'exit': ");
+        if (fgets(input, sizeof(input), stdin) == NULL) {
+            break;
+        }
+        // Remove the newline character from fgets
+        input[strcspn(input, "\n")] = '\0';
+
+        if (strncmp(input, "exit", 4) == 0) {
+            break;  
+        }
+        if (parse_csv_line(input, &info) == 0) {
+            distribute_computation(info.operation_type, info.operand1, info.operand2, info.request_id);
+            info.request_id++;
+        } else {
+            printf("Invalid input format. Please try again.\n");
+        }
+    }
+    send_completion_signal(info.request_id - 1);
+    return 0;
+}
 
 int process_csv_file(char* filename){
     // Reads CSV file and sends operations to computation nodes
