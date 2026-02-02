@@ -134,6 +134,9 @@ void process_computation(struct ComputationResult info)
 
 void send_result_to_display(struct ComputationResult info){
     // Sends computation result back to display node
+    printf("Sending result back to display: ID=%d, Result=%.2f, Status=%d\n",
+           info.request_id, info.result, info.status);
+
 };
 
 void log_computation(struct ComputationResult info){
