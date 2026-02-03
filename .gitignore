@@ -40,10 +40,10 @@ Desktop.ini
 *.hosts
 mpirun.*
 
-# Docker files (until ready)
-Dockerfile*
-docker-compose.yml
-.dockerignore
+# Docker files (until ready) - COMMENTED OUT TO TRACK DOCKER FILES
+# Dockerfile*
+# docker-compose.yml
+# .dockerignore
 
 # Build directories
 build/
