@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <mpi.h>
 
+#include "tags.h"
+
 struct ComputationResult {
     int operation_type;
     double operand1;
@@ -9,6 +11,7 @@ struct ComputationResult {
     double result;
     int request_id;
     int status;
+    double time;
 };
 
 // Function prototypes
@@ -57,7 +60,7 @@ void receive_computation_request(){
     
     // Receive the computation request from UI node
     MPI_Recv(&info, sizeof(struct ComputationResult), MPI_BYTE, 
-             0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+             0, ALU_TAG, MPI_COMM_WORLD, &status);
     
     // Log what we received for debugging
     printf("Computation node received: ID=%d, Op=%d, %.2f %s %.2f\n", 
@@ -73,28 +76,35 @@ void receive_computation_request(){
 };  
 
 void perform_addition(struct ComputationResult info){
+    info.time = -MPI_Wtime();
     // Performs addition operation
     info.result = info.operand1 + info.operand2;
     info.status = 0;  // Success status
+    info.time += MPI_Wtime();
     send_result_to_display(info);
 };
 
 void perform_subtraction(struct ComputationResult info)
 {
+    info.time = -MPI_Wtime();
     // Performs subtraction operation
     info.result = info.operand1 - info.operand2;
     info.status = 0;  // Success status
+    info.time += MPI_Wtime();
     send_result_to_display(info);
 };
 
 void perform_multiplication(struct ComputationResult info){
+    info.time = -MPI_Wtime();
     // Performs multiplication operation
     info.result = info.operand1 * info.operand2;
     info.status = 0;  // Success status
+    info.time += MPI_Wtime();
     send_result_to_display(info);
 };
 
 void perform_division(struct ComputationResult info){
+    info.time = -MPI_Wtime();
     // Validates and performs division operation
     // CRITICAL: Always send response to maintain synchronization with display node
     
@@ -108,13 +118,14 @@ void perform_division(struct ComputationResult info){
         info.status = 0;    // Set success status
     }
     
+    info.time += MPI_Wtime();
     // Always send result back, even for errors
     send_result_to_display(info);
 };
 
 void process_computation(struct ComputationResult info)
 {
-    // Processes the computation - since UI routes by type, 
+    // Processes the computation - since UI routes by type,
     // this node will only receive one operation type, but handle any type for flexibility
     if (info.operation_type == 1) {
         perform_addition(info);
@@ -136,7 +147,9 @@ void send_result_to_display(struct ComputationResult info){
     // Sends computation result back to display node
     printf("Sending result back to display: ID=%d, Result=%.2f, Status=%d\n",
            info.request_id, info.result, info.status);
-
+           
+    MPI_Send(&info, sizeof(struct ComputationResult), MPI_BYTE, 
+                               5, RESULT_TAG, MPI_COMM_WORLD);
 };
 
 void log_computation(struct ComputationResult info){

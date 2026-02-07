@@ -4,6 +4,8 @@
 #include <string.h>
 #include <mpi.h>
 
+#include "tags.h"
+
 struct ComputationResult {
     int operation_type; //1:Addition, 2:Subtraction, 3:Multiplication, 4:Division
     double operand1;
@@ -11,6 +13,7 @@ struct ComputationResult {
     double result;
     int request_id;
     int status;
+    double time;
 };
 
 // Function prototypes
@@ -130,10 +133,12 @@ void send_computation_request(struct ComputationResult info){
     
     // Send the struct to the target computation node
     int send_result = MPI_Send(&info, sizeof(struct ComputationResult), MPI_BYTE, 
-                               target_rank, 0, MPI_COMM_WORLD);
+                               target_rank, ALU_TAG, MPI_COMM_WORLD);
 };
 
 void send_completion_signal(int total_operations){
     // Notifies display node that all computations are complete
     printf("All %d computations have been sent. Notifying display node of completion.\n", total_operations);
+    // Send the total computations to the display node
+    MPI_Send(&total_operations, 1, MPI_INT, 5, COUNT_TAG, MPI_COMM_WORLD);
 };
