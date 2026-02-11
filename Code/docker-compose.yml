@@ -1,0 +1,67 @@
+# Docker Compose for MPI-based distributed computation
+services:
+  # All nodes - will participate in MPI communication
+  node1:
+    build: .
+    hostname: node1
+    container_name: distributed_node1
+    networks:
+      distributed_net:
+        ipv4_address: 172.30.0.11
+    volumes:
+      - ./results:/app/results
+    privileged: true
+    
+  node2:
+    build: .
+    hostname: node2
+    container_name: distributed_node2
+    networks:
+      distributed_net:
+        ipv4_address: 172.30.0.12
+    privileged: true
+    
+  node3:
+    build: .
+    hostname: node3
+    container_name: distributed_node3
+    networks:
+      distributed_net:
+        ipv4_address: 172.30.0.13
+    privileged: true
+    
+  node4:
+    build: .
+    hostname: node4
+    container_name: distributed_node4
+    networks:
+      distributed_net:
+        ipv4_address: 172.30.0.14
+    privileged: true
+    
+  node5:
+    build: .
+    hostname: node5
+    container_name: distributed_node5
+    networks:
+      distributed_net:
+        ipv4_address: 172.30.0.15
+    privileged: true
+    
+  node6:
+    build: .
+    hostname: node6
+    container_name: distributed_node6
+    networks:
+      distributed_net:
+        ipv4_address: 172.30.0.16
+    volumes:
+      - ./results:/app/results
+    privileged: true
+
+networks:
+  distributed_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.0.0/16
