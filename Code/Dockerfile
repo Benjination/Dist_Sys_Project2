@@ -40,6 +40,7 @@ COPY computation.c .
 COPY display.c .
 COPY test_data.csv .
 COPY mpi_launcher.sh .
+COPY tags.h .
 
 # Compile the C applications with MPI
 RUN mpicc -o user_interface user_Interface.c

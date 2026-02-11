@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include <mpi.h>
 
 #include "tags.h"
-
 // Synchronization variables
 int expected_results = 0;     // How many results we expect from UI
 int received_results = 0;     // How many results we've actually received (including errors)
@@ -32,7 +32,7 @@ void store_result(struct ComputationResult info);
 void organize_results_by_type();
 void receive_completion_signal();
 void generate_output();
-void calculate_statistics();
+void calculate_statistics(struct ComputationResult info, bool print);
 void display_to_console();
 void cleanup_output_file();
 
@@ -55,7 +55,7 @@ void run(){
     
     // After displaying all results, clean up for next run
     display_to_console();
-    cleanup_output_file();
+    //cleanup_output_file();
 };
 
 void initialize_output_file(){
@@ -102,7 +102,7 @@ void receive_computation_result(){
     // If from computation node: store result and increment received_results
     // If from UI node: set expected_results and ui_done_signal = 1
     MPI_Recv(&info, sizeof(struct ComputationResult), MPI_BYTE, 
-             MPI_ANY_SOURCE, RESULT_TAG, MPI_COMM_WORLD, &status);
+             MPI_ANY_SOURCE, RESULT_TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
     // For now, placeholder logic:
     received_results++;
     store_result(info);
@@ -148,7 +148,7 @@ void receive_completion_signal(){
     // TODO: MPI_Recv from rank 0 to get expected_results count
     if(expected_results == 0) {
         MPI_Recv(&expected_results, 1, MPI_INT, 
-             0, COUNT_TAG, MPI_COMM_WORLD, &status);
+             0, COUNT_TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
     }
     ui_done_signal = 1;
     printf("UI node finished. Expecting %d total results.\n", expected_results);
@@ -174,33 +174,25 @@ void calculate_statistics(struct ComputationResult info, bool print){
             perror("Error opening output file");
             exit(EXIT_FAILURE);
         }
-        fprintf(file, "\n\nStatistics\nTotal Operations\nAddition: %d\n
-                        Subtraction: %d\nMultiplication: %d\nDivision: %d\n
-                        Average Time: %.2f\n",
-                        totalOp[0],totalOp[1],totalOp[2],totalOp[3],avgTime);
+        fprintf(file, "\n\nStatistics\nTotal Operations\nAddition: %d\nSubtraction: %d\nMultiplication: %d\nDivision: %d\nAverage Time: %.2f\n",totalOp[0],totalOp[1],totalOp[2],totalOp[3],avgTime);
         fclose(file);  // Close
 
-        printf("Addition:\t\t%d\n
-                Subtraction:\t\t%d\n
-                Multiplication:\t%d\n
-                Divison:\t\t%d\n
-                Average time per operation: %.2f\n
-                Process complete. See computation_results.csv for results\n",
-                totalOp[0],totalOp[1],totalOp[2],totalOp[3],avgTime)
+        printf("Addition:\t\t%d\nSubtraction:\t\t%d\nMultiplication:\t%d\nDivision:\t\t%d\nAverage time per operation: %.2f\nProcess complete. See computation_results.csv for results\n",
+                totalOp[0],totalOp[1],totalOp[2],totalOp[3],avgTime);
     }
 };
 
-void cleanup_output_file(){
-    // Clears the output file contents after displaying results
-    // This ensures each run starts fresh without contamination from previous runs
-    FILE *file = fopen("computation_results.csv", "w");
-    if (file == NULL) {
-        perror("Error cleaning output file");
-        return;
-    }
-    fclose(file);  // Close empty file
-    printf("Output file cleared for next run\n");
-};
+// void cleanup_output_file(){
+//     // Clears the output file contents after displaying results
+//     // This ensures each run starts fresh without contamination from previous runs
+//     FILE *file = fopen("computation_results.csv", "w");
+//     if (file == NULL) {
+//         perror("Error cleaning output file");
+//         return;
+//     }
+//     fclose(file);  // Close empty file
+//     printf("Output file cleared for next run\n");
+// };
 
 void display_to_console(){
     // Displays results and statistics to console
