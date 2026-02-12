@@ -1,0 +1,51 @@
+# Multi-machine deployment - Machine 1
+# Runs nodes 1-3 using host networking for cross-machine communication
+# Replace MACHINE1_IP and MACHINE2_IP with actual IP addresses
+
+services:
+  node1:
+    image: bennythepooh/mpi-distributed-system
+    hostname: node1
+    container_name: distributed_node1
+    network_mode: host
+    volumes:
+      - ./results:/app/results
+    privileged: true
+    environment:
+      - DEPLOYMENT_MODE=multi-machine
+      - MACHINE1_IP=192.168.1.2  # Replace with Machine 1 IP
+      - MACHINE2_IP=192.168.1.101  # Replace with Machine 2 IP
+    ports:
+      - "2201:22"  # SSH for node1
+    command: >
+      sh -c "/app/create-hostfile.sh && /usr/sbin/sshd -D"
+    
+  node2:
+    image: bennythepooh/mpi-distributed-system
+    hostname: node2
+    container_name: distributed_node2
+    network_mode: host
+    privileged: true
+    environment:
+      - DEPLOYMENT_MODE=multi-machine
+      - MACHINE1_IP=192.168.1.100  # Replace with Machine 1 IP
+      - MACHINE2_IP=192.168.1.101  # Replace with Machine 2 IP
+    ports:
+      - "2202:22"  # SSH for node2
+    command: >
+      sh -c "/app/create-hostfile.sh && /usr/sbin/sshd -D"
+    
+  node3:
+    image: bennythepooh/mpi-distributed-system
+    hostname: node3
+    container_name: distributed_node3
+    network_mode: host
+    privileged: true
+    environment:
+      - DEPLOYMENT_MODE=multi-machine
+      - MACHINE1_IP=192.168.1.100  # Replace with Machine 1 IP
+      - MACHINE2_IP=192.168.1.101  # Replace with Machine 2 IP
+    ports:
+      - "2203:22"  # SSH for node3
+    command: >
+      sh -c "/app/create-hostfile.sh && /usr/sbin/sshd -D"

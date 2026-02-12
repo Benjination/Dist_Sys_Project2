@@ -1,0 +1,92 @@
+# Single-machine deployment (current setup)
+# Run all 6 nodes on one machine using container networking
+
+services:
+  node1:
+    image: bennythepooh/mpi-distributed-system
+    hostname: node1
+    container_name: distributed_node1
+    networks:
+      distributed_net:
+        ipv4_address: 172.30.0.11
+    volumes:
+      - ./results:/app/results
+    privileged: true
+    environment:
+      - DEPLOYMENT_MODE=single-machine
+    command: >
+      sh -c "/app/create-hostfile.sh && /usr/sbin/sshd -D"
+    
+  node2:
+    image: bennythepooh/mpi-distributed-system
+    hostname: node2
+    container_name: distributed_node2
+    networks:
+      distributed_net:
+        ipv4_address: 172.30.0.12
+    privileged: true
+    environment:
+      - DEPLOYMENT_MODE=single-machine
+    command: >
+      sh -c "/app/create-hostfile.sh && /usr/sbin/sshd -D"
+    
+  node3:
+    image: bennythepooh/mpi-distributed-system
+    hostname: node3
+    container_name: distributed_node3
+    networks:
+      distributed_net:
+        ipv4_address: 172.30.0.13
+    privileged: true
+    environment:
+      - DEPLOYMENT_MODE=single-machine
+    command: >
+      sh -c "/app/create-hostfile.sh && /usr/sbin/sshd -D"
+    
+  node4:
+    image: bennythepooh/mpi-distributed-system
+    hostname: node4
+    container_name: distributed_node4
+    networks:
+      distributed_net:
+        ipv4_address: 172.30.0.14
+    privileged: true
+    environment:
+      - DEPLOYMENT_MODE=single-machine
+    command: >
+      sh -c "/app/create-hostfile.sh && /usr/sbin/sshd -D"
+    
+  node5:
+    image: bennythepooh/mpi-distributed-system
+    hostname: node5
+    container_name: distributed_node5
+    networks:
+      distributed_net:
+        ipv4_address: 172.30.0.15
+    privileged: true
+    environment:
+      - DEPLOYMENT_MODE=single-machine
+    command: >
+      sh -c "/app/create-hostfile.sh && /usr/sbin/sshd -D"
+    
+  node6:
+    image: bennythepooh/mpi-distributed-system
+    hostname: node6
+    container_name: distributed_node6
+    networks:
+      distributed_net:
+        ipv4_address: 172.30.0.16
+    volumes:
+      - ./results:/app/results
+    privileged: true
+    environment:
+      - DEPLOYMENT_MODE=single-machine
+    command: >
+      sh -c "/app/create-hostfile.sh && /usr/sbin/sshd -D"
+
+networks:
+  distributed_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.0.0/16

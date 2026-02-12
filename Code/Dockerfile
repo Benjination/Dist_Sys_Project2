@@ -47,10 +47,14 @@ RUN mpicc -o user_interface user_Interface.c
 RUN mpicc -o computation computation.c  
 RUN mpicc -o display display.c
 
-# Make launcher script executable
-RUN chmod +x mpi_launcher.sh
+# Copy hostfile creation script
+COPY create-hostfile.sh .
 
-# Create MPI hostfile for distributed execution
+# Make scripts executable
+RUN chmod +x mpi_launcher.sh
+RUN chmod +x create-hostfile.sh
+
+# Create default hostfile (will be overridden by create-hostfile.sh at runtime)
 RUN echo "node1 slots=1" > hostfile && \
     echo "node2 slots=1" >> hostfile && \
     echo "node3 slots=1" >> hostfile && \
