@@ -71,7 +71,6 @@ int receive_computation_request(){
         return -1;
     }
     
-#if PRINTS_COMP             
     // Log what we received for debugging
     printf("Computation node received: ID=%d, Op=%d, %.2f %s %.2f\n", 
            info.request_id, info.operation_type, info.operand1, 
@@ -79,16 +78,11 @@ int receive_computation_request(){
            (info.operation_type == 2) ? "-" : 
            (info.operation_type == 3) ? "*" : "/", 
            info.operand2);
-#endif
     
     // Process the computation
     process_computation(info);
-<<<<<<< HEAD
     
     return 0;
-=======
-    return;
->>>>>>> b8420add19ca9d7a2310f163790c2b08148a34c6
 };  
 
 void perform_addition(struct ComputationResult info){
@@ -160,20 +154,15 @@ void process_computation(struct ComputationResult info)
 };
 
 void send_result_to_display(struct ComputationResult info){
-#if PRINTS_COMP     
     // Sends computation result back to display node
     printf("Sending result back to display: ID=%d, Result=%.2f, Status=%d\n",
            info.request_id, info.result, info.status);
-#endif
-
+           
     MPI_Send(&info, sizeof(struct ComputationResult), MPI_BYTE, 
                                5, RESULT_TAG, MPI_COMM_WORLD);
 };
 
 void log_computation(struct ComputationResult info){
-#if PRINTS_COMP     
     // Logs computation details for auditing
     printf("Logged computation: Request ID %d, Operation %d, Operands %.2f and %.2f, Result %.2f, Status %d\n",
-           info.request_id, info.operation_type, info.operand1, info.operand2, info.result, info.status);
-#endif    
-};
+           info.request_id, info.operation_type, info.operand1, info.operand2, info.result, info.status);};
