@@ -98,7 +98,9 @@ int process_csv_file(char* filename){
         }
     }
     fclose(file);
+#if PRINTS_USER
     printf("Total lines processed: %d, Operations sent: %d\n", line_number, total_operations);
+#endif
     send_completion_signal(total_operations);
     return 0;
 };
@@ -137,8 +139,10 @@ void send_computation_request(struct ComputationResult info){
 };
 
 void send_completion_signal(int total_operations){
+#if PRINTS_USER
     // Notifies display node that all computations are complete
     printf("All %d computations have been sent. Notifying display node of completion.\n", total_operations);
+#endif
     // Send the total computations to the display node
     MPI_Send(&total_operations, 1, MPI_INT, 5, COUNT_TAG, MPI_COMM_WORLD);
 };
