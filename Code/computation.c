@@ -17,7 +17,7 @@ struct ComputationResult {
 // Function prototypes
 void run();
 void listen_for_requests();
-void receive_computation_request();
+int receive_computation_request();
 void perform_addition(struct ComputationResult info);
 void perform_subtraction(struct ComputationResult info);
 void perform_multiplication(struct ComputationResult info);
@@ -48,11 +48,14 @@ void run(){
 void listen_for_requests(){
     // Listens for incoming computation requests from display node
     while (1) {
-        receive_computation_request();
+        int result = receive_computation_request();
+        if (result == -1) { // Termination signal received
+            break;
+        }
     }
 };
 
-void receive_computation_request(){
+int receive_computation_request(){
     // Receives computation request via MPI from UI node (rank 0)
     // Populates the info structure with received data
     struct ComputationResult info;
@@ -60,7 +63,13 @@ void receive_computation_request(){
     
     // Receive the computation request from UI node
     MPI_Recv(&info, sizeof(struct ComputationResult), MPI_BYTE, 
-             0, ALU_TAG, MPI_COMM_WORLD, &status);
+             MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+    
+    // Check if it's a termination signal
+    if (status.MPI_TAG == TERMINATE_TAG) {
+        printf("Computation node received termination signal. Shutting down.\n");
+        return -1;
+    }
     
     // Log what we received for debugging
     printf("Computation node received: ID=%d, Op=%d, %.2f %s %.2f\n", 
@@ -72,7 +81,8 @@ void receive_computation_request(){
     
     // Process the computation
     process_computation(info);
-
+    
+    return 0;
 };  
 
 void perform_addition(struct ComputationResult info){

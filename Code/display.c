@@ -24,7 +24,7 @@ struct ComputationResult {
 };
 
 // Function prototypes
-void run();
+int run();
 void initialize_output_file();
 void listen_for_results();
 void receive_computation_result();
@@ -34,6 +34,7 @@ void receive_completion_signal();
 void generate_output();
 void calculate_statistics(struct ComputationResult info, bool print);
 void display_to_console();
+void send_termination_signals();
 void cleanup_output_file();
 
 
@@ -48,7 +49,7 @@ int main (int argc, char *argv[]) {
     return 0;
 }   
 
-void run(){
+int run(){
     // Main execution loop for display node
     initialize_output_file();
     listen_for_results();
@@ -56,11 +57,12 @@ void run(){
     // After displaying all results, clean up for next run
     display_to_console();
     //cleanup_output_file();
+    return 0;
 };
 
 void initialize_output_file(){
     // Sets up output file for storing results
-    FILE *file = fopen("computation_results.csv", "w");
+    FILE *file = fopen("/app/results/computation_results.csv", "w");
     if (file == NULL) {
         perror("Error creating output file");
         exit(EXIT_FAILURE);
@@ -121,7 +123,7 @@ void store_result(struct ComputationResult info){
     // Even errors get stored to maintain accurate count
 
     // Storing bulk of content dirctly to CSV file
-    FILE *file = fopen("computation_results.csv", "a");
+    FILE *file = fopen("/app/results/computation_results.csv", "a");
     if (file == NULL) {
         perror("Error opening output file");
         exit(EXIT_FAILURE);
@@ -169,7 +171,7 @@ void calculate_statistics(struct ComputationResult info, bool print){
     } else {
         avgTime /= expected_results;
         // print the statistics at the end of the result file
-        FILE *file = fopen("computation_results.csv", "a");
+        FILE *file = fopen("/app/results/computation_results.csv", "a");
         if (file == NULL) {
             perror("Error opening output file");
             exit(EXIT_FAILURE);
@@ -177,7 +179,7 @@ void calculate_statistics(struct ComputationResult info, bool print){
         fprintf(file, "\n\nStatistics\nTotal Operations\nAddition: %d\nSubtraction: %d\nMultiplication: %d\nDivision: %d\nAverage Time: %.2f\n",totalOp[0],totalOp[1],totalOp[2],totalOp[3],avgTime);
         fclose(file);  // Close
 
-        printf("Addition:\t\t%d\nSubtraction:\t\t%d\nMultiplication:\t%d\nDivision:\t\t%d\nAverage time per operation: %.2f\nProcess complete. See computation_results.csv for results\n",
+        printf("Addition:\t\t%d\nSubtraction:\t\t%d\nMultiplication:\t%d\nDivision:\t\t%d\nAverage time per operation: %.2f\nProcess complete. See /app/results/computation_results.csv for results\n",
                 totalOp[0],totalOp[1],totalOp[2],totalOp[3],avgTime);
     }
 };
@@ -198,6 +200,21 @@ void display_to_console(){
     // Displays results and statistics to console
     struct ComputationResult info;
     calculate_statistics(info, 1);
+    
+    // Send termination signals to all computation nodes
+    send_termination_signals();
+};
+
+void send_termination_signals(){
+    // Send termination signals to all computation nodes (ranks 1-4)
+    int terminate_signal = 0;
+    printf("Sending termination signals to computation nodes...\n");
+    
+    for (int rank = 1; rank <= 4; rank++) {
+        MPI_Send(&terminate_signal, 1, MPI_INT, rank, TERMINATE_TAG, MPI_COMM_WORLD);
+    }
+    
+    printf("All termination signals sent. Display node shutting down.\n");
 };
 
 
