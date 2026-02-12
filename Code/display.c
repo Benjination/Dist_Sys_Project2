@@ -177,7 +177,7 @@ void calculate_statistics(struct ComputationResult info, bool print){
         fprintf(file, "\n\nStatistics\nTotal Operations\nAddition: %d\nSubtraction: %d\nMultiplication: %d\nDivision: %d\nAverage Time: %.2f\n",totalOp[0],totalOp[1],totalOp[2],totalOp[3],avgTime);
         fclose(file);  // Close
 
-        printf("Addition:\t\t%d\nSubtraction:\t\t%d\nMultiplication:\t%d\nDivision:\t\t%d\nAverage time per operation: %.2f\nProcess complete. See computation_results.csv for results\n",
+        printf("Addition:\t\t%d\nSubtraction:\t\t%d\nMultiplication:\t\t%d\nDivision:\t\t%d\nAverage time per operation: %.2f\nProcess complete. See computation_results.csv for results\n",
                 totalOp[0],totalOp[1],totalOp[2],totalOp[3],avgTime);
     }
 };
