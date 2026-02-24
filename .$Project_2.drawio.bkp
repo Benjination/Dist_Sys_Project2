@@ -1,116 +1,101 @@
-<mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.3.0 Chrome/140.0.7339.249 Electron/38.7.2 Safari/537.36" version="29.3.0">
+<mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.3.6 Chrome/140.0.7339.249 Electron/38.8.0 Safari/537.36" version="29.3.6">
   <diagram name="Page-1" id="wc9xqC_324fQSNsJTeB8">
     <mxGraphModel dx="1395" dy="1038" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="IZJgCh1n1-sP1YJjxnXS-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="UI Node" vertex="1">
-          <mxGeometry height="30" width="790" x="50" y="70" as="geometry" />
+        <mxCell id="iNKjuxUSMtIzWRRn6FnJ-13" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;" value="" vertex="1">
+          <mxGeometry height="970" width="1500" x="10" y="10" as="geometry" />
         </mxCell>
-        <mxCell id="IZJgCh1n1-sP1YJjxnXS-14" edge="1" parent="1" source="IZJgCh1n1-sP1YJjxnXS-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;" target="IZJgCh1n1-sP1YJjxnXS-10">
+        <mxCell id="IZJgCh1n1-sP1YJjxnXS-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontColor=#000000;fillColor=#60a917;strokeColor=#000000;gradientColor=default;gradientDirection=south;" value="UI Node" vertex="1">
+          <mxGeometry height="30" width="1420" x="50" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="IZJgCh1n1-sP1YJjxnXS-14" edge="1" parent="1" source="IZJgCh1n1-sP1YJjxnXS-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=classic;endFill=1;fontColor=#000000;" target="IZJgCh1n1-sP1YJjxnXS-10">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="450" y="320" />
-              <mxPoint x="165" y="320" />
+              <mxPoint x="760" y="320" />
+              <mxPoint x="220" y="320" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="IZJgCh1n1-sP1YJjxnXS-3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Functions:&#xa;• run()&#xa;• process_interactive_input()&#xa;• process_csv_file()&#xa;• parse_csv_line()&#xa;• distribute_computation()&#xa;• send_computation_request()&#xa;• send_completion_signal()&#xa;• handle_completion()" vertex="1">
-          <mxGeometry height="180" width="790" x="50" y="100" as="geometry" />
+        <mxCell id="IZJgCh1n1-sP1YJjxnXS-25" edge="1" parent="1" source="IZJgCh1n1-sP1YJjxnXS-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontColor=#000000;" target="IZJgCh1n1-sP1YJjxnXS-7">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="IZJgCh1n1-sP1YJjxnXS-15" edge="1" parent="1" source="IZJgCh1n1-sP1YJjxnXS-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;">
+        <mxCell id="IZJgCh1n1-sP1YJjxnXS-3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontColor=#000000;fillColor=#60a917;strokeColor=#000000;gradientColor=default;gradientDirection=north;" value="&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;Functions:&lt;br&gt;• run()&lt;br&gt;•&amp;nbsp;&lt;span style=&quot;background-color: transparent;&quot;&gt;void process_interactive_input(void);&lt;br&gt;&lt;/span&gt;&lt;/font&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;int process_csv_file(char* filename);&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;int parse_csv_line(char* line, struct ComputationResult* info);&lt;br&gt;&lt;/span&gt;&lt;/font&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void send_computation_request(struct ComputationResult info);&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void send_completion_signal(int total_operations);&lt;/font&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="180" width="1420" x="50" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="IZJgCh1n1-sP1YJjxnXS-15" edge="1" parent="1" source="IZJgCh1n1-sP1YJjxnXS-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;fontColor=#000000;exitX=0.5;exitY=0;exitDx=0;exitDy=0;startArrow=classic;startFill=1;">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="355" y="320" />
-              <mxPoint x="450" y="320" />
+              <mxPoint x="580" y="320" />
+              <mxPoint x="760" y="320" />
             </Array>
-            <mxPoint x="450" y="280" as="targetPoint" />
+            <mxPoint x="760" y="280" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="IZJgCh1n1-sP1YJjxnXS-4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Subtraction Node" vertex="1">
-          <mxGeometry height="30" width="180" x="260" y="350" as="geometry" />
+        <mxCell id="IZJgCh1n1-sP1YJjxnXS-4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontColor=#000000;strokeColor=#000000;fillColor=#99FF99;gradientColor=default;" value="Subtraction Node" vertex="1">
+          <mxGeometry height="30" width="340" x="410" y="350" as="geometry" />
         </mxCell>
-        <mxCell id="IZJgCh1n1-sP1YJjxnXS-19" edge="1" parent="1" source="IZJgCh1n1-sP1YJjxnXS-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="IZJgCh1n1-sP1YJjxnXS-7" value="">
+        <mxCell id="IZJgCh1n1-sP1YJjxnXS-6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontColor=#000000;fillColor=#008a00;strokeColor=#005700;gradientColor=default;" value="Display Node" vertex="1">
+          <mxGeometry height="30" width="1420" x="50" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="IZJgCh1n1-sP1YJjxnXS-7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontColor=#000000;fillColor=#60a917;strokeColor=#2D7600;gradientColor=default;gradientDirection=north;" value="&lt;div&gt;Functions:&lt;/div&gt;&lt;div&gt;•&amp;nbsp;&lt;span style=&quot;background-color: transparent;&quot;&gt;int run();&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(237, 237, 237));&quot;&gt;•&amp;nbsp;&lt;/span&gt;void initialize_output_file();&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(237, 237, 237));&quot;&gt;•&amp;nbsp;&lt;/span&gt;void listen_for_results();&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(237, 237, 237));&quot;&gt;•&amp;nbsp;&lt;/span&gt;void receive_computation_result();&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(237, 237, 237));&quot;&gt;•&amp;nbsp;&lt;/span&gt;void store_result(struct ComputationResult info);&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(237, 237, 237));&quot;&gt;•&amp;nbsp;&lt;/span&gt;void organize_results_by_type();&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(237, 237, 237));&quot;&gt;•&amp;nbsp;&lt;/span&gt;void receive_completion_signal();&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(237, 237, 237));&quot;&gt;•&amp;nbsp;&lt;/span&gt;void generate_output();&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(237, 237, 237));&quot;&gt;•&amp;nbsp;&lt;/span&gt;void calculate_statistics(struct ComputationResult info, bool print);&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(237, 237, 237));&quot;&gt;•&amp;nbsp;&lt;/span&gt;void display_to_console();&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(237, 237, 237));&quot;&gt;•&amp;nbsp;&lt;/span&gt;void send_termination_signals();&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(237, 237, 237));&quot;&gt;•&amp;nbsp;&lt;/span&gt;void cleanup_output_file();&lt;/div&gt;" vertex="1">
+          <mxGeometry height="240" width="1420" x="50" y="690" as="geometry" />
+        </mxCell>
+        <mxCell id="IZJgCh1n1-sP1YJjxnXS-17" edge="1" parent="1" source="IZJgCh1n1-sP1YJjxnXS-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;fontColor=#000000;exitX=0.5;exitY=0;exitDx=0;exitDy=0;startArrow=classic;startFill=1;">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="350" y="600" />
-              <mxPoint x="450" y="600" />
+              <mxPoint x="1300" y="320" />
+              <mxPoint x="760" y="320" />
+              <mxPoint x="760" y="280" />
             </Array>
+            <mxPoint x="760" y="280" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="IZJgCh1n1-sP1YJjxnXS-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;div&gt;Functions:&lt;/div&gt;&lt;div&gt;• run()&lt;/div&gt;&lt;div&gt;• listen_for_requests()&lt;/div&gt;&lt;div&gt;• receive_computation_request()&lt;/div&gt;&lt;div&gt;• perform_subtraction()&lt;/div&gt;&lt;div&gt;• process_computation()&lt;/div&gt;&lt;div&gt;• send_result_to_display()&lt;/div&gt;&lt;div&gt;• log_computation()&lt;/div&gt;" vertex="1">
-          <mxGeometry height="180" width="180" x="260" y="380" as="geometry" />
+        <mxCell id="IZJgCh1n1-sP1YJjxnXS-8" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontColor=#000000;fillColor=#99FF99;gradientColor=default;strokeColor=#000000;" value="Division Node" vertex="1">
+          <mxGeometry height="30" width="340" x="1130" y="350" as="geometry" />
         </mxCell>
-        <mxCell id="IZJgCh1n1-sP1YJjxnXS-6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Display Node" vertex="1">
-          <mxGeometry height="30" width="790" x="50" y="640" as="geometry" />
+        <mxCell id="iNKjuxUSMtIzWRRn6FnJ-12" edge="1" parent="1" source="IZJgCh1n1-sP1YJjxnXS-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;startArrow=classic;startFill=1;" target="IZJgCh1n1-sP1YJjxnXS-6">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="IZJgCh1n1-sP1YJjxnXS-7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;div&gt;Functions:&lt;/div&gt;&lt;div&gt;• run()&lt;/div&gt;&lt;div&gt;• initialize_output_file()&lt;/div&gt;&lt;div&gt;• listen_for_results()&lt;/div&gt;&lt;div&gt;• receive_computation_result()&lt;/div&gt;&lt;div&gt;• store_result()&lt;/div&gt;&lt;div&gt;• organize_results_by_type()&lt;/div&gt;&lt;div&gt;• receive_completion_signal()&lt;/div&gt;&lt;div&gt;• generate_output()&lt;/div&gt;&lt;div&gt;• calculate_statistics()&lt;/div&gt;&lt;div&gt;• display_to_console()&lt;/div&gt;" vertex="1">
-          <mxGeometry height="180" width="790" x="50" y="670" as="geometry" />
+        <mxCell id="IZJgCh1n1-sP1YJjxnXS-9" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontColor=#000000;fillColor=#CCFFCC;gradientColor=default;gradientDirection=north;strokeColor=#000000;" value="&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;Functions:&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;•&amp;nbsp;&lt;span style=&quot;background-color: transparent;&quot;&gt;void run();&lt;/span&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void listen_for_requests();&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;int receive_computation_request();&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void perform_addition(struct ComputationResult info);&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void perform_subtraction(struct ComputationResult info);&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void perform_multiplication(struct ComputationResult info);&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void perform_division(struct ComputationResult info);&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void validate_division();&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void process_computation(struct ComputationResult info);&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void&amp;nbsp;&lt;span style=&quot;background-color: transparent;&quot;&gt;send_result_to_display(struct ComputationResult info);&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void log_computation(struct ComputationResult info);&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="210" width="340" x="1130" y="380" as="geometry" />
         </mxCell>
-        <mxCell id="IZJgCh1n1-sP1YJjxnXS-17" edge="1" parent="1" source="IZJgCh1n1-sP1YJjxnXS-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;">
+        <mxCell id="IZJgCh1n1-sP1YJjxnXS-10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontColor=#000000;strokeColor=#000000;fillColor=#99FF99;gradientColor=default;" value="Addition Node" vertex="1">
+          <mxGeometry height="30" width="340" x="50" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="IZJgCh1n1-sP1YJjxnXS-16" edge="1" parent="1" source="IZJgCh1n1-sP1YJjxnXS-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;fontColor=#000000;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;startArrow=classic;startFill=1;" target="IZJgCh1n1-sP1YJjxnXS-3">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="735" y="320" />
-              <mxPoint x="450" y="320" />
-            </Array>
-            <mxPoint x="450" y="280" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="IZJgCh1n1-sP1YJjxnXS-8" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Division Node" vertex="1">
-          <mxGeometry height="30" width="180" x="660" y="350" as="geometry" />
-        </mxCell>
-        <mxCell id="IZJgCh1n1-sP1YJjxnXS-21" edge="1" parent="1" source="IZJgCh1n1-sP1YJjxnXS-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;" target="IZJgCh1n1-sP1YJjxnXS-6">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="750" y="600" />
-              <mxPoint x="450" y="600" />
-              <mxPoint x="450" y="640" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="IZJgCh1n1-sP1YJjxnXS-9" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;div&gt;• run()&lt;/div&gt;&lt;div&gt;• listen_for_requests()&lt;/div&gt;&lt;div&gt;• receive_computation_request()&lt;/div&gt;&lt;div&gt;• perform_division()&lt;/div&gt;&lt;div&gt;• validate_division()&lt;/div&gt;&lt;div&gt;• process_computation()&lt;/div&gt;&lt;div&gt;• send_result_to_display()&lt;/div&gt;&lt;div&gt;• log_computation()&lt;/div&gt;" vertex="1">
-          <mxGeometry height="180" width="180" x="660" y="380" as="geometry" />
-        </mxCell>
-        <mxCell id="IZJgCh1n1-sP1YJjxnXS-10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Addition Node" vertex="1">
-          <mxGeometry height="30" width="190" x="50" y="350" as="geometry" />
-        </mxCell>
-        <mxCell id="IZJgCh1n1-sP1YJjxnXS-18" edge="1" parent="1" source="IZJgCh1n1-sP1YJjxnXS-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;" target="IZJgCh1n1-sP1YJjxnXS-6">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="145" y="600" />
-              <mxPoint x="450" y="600" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="IZJgCh1n1-sP1YJjxnXS-11" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;div&gt;Functions:&lt;/div&gt;&lt;div&gt;• run()&lt;/div&gt;&lt;div&gt;• listen_for_requests()&lt;/div&gt;&lt;div&gt;• receive_computation_request()&lt;/div&gt;&lt;div&gt;• perform_addition()&lt;/div&gt;&lt;div&gt;• process_computation()&lt;/div&gt;&lt;div&gt;• send_result_to_display()&lt;/div&gt;&lt;div&gt;• log_computation()&lt;/div&gt;" vertex="1">
-          <mxGeometry height="180" width="190" x="50" y="380" as="geometry" />
-        </mxCell>
-        <mxCell id="IZJgCh1n1-sP1YJjxnXS-16" edge="1" parent="1" source="IZJgCh1n1-sP1YJjxnXS-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="545" y="320" />
-              <mxPoint x="450" y="320" />
+              <mxPoint x="940" y="320" />
+              <mxPoint x="760" y="320" />
             </Array>
             <mxPoint x="450" y="280" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="IZJgCh1n1-sP1YJjxnXS-12" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Multiplication Node" vertex="1">
-          <mxGeometry height="30" width="180" x="460" y="350" as="geometry" />
+        <mxCell id="IZJgCh1n1-sP1YJjxnXS-12" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontColor=#000000;fillColor=#99FF99;gradientColor=default;strokeColor=#000000;" value="Multiplication Node" vertex="1">
+          <mxGeometry height="30" width="340" x="770" y="350" as="geometry" />
         </mxCell>
-        <mxCell id="IZJgCh1n1-sP1YJjxnXS-20" edge="1" parent="1" source="IZJgCh1n1-sP1YJjxnXS-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="550" y="600" />
-              <mxPoint x="450" y="600" />
-            </Array>
-            <mxPoint x="450" y="640" as="targetPoint" />
-          </mxGeometry>
+        <mxCell id="IZJgCh1n1-sP1YJjxnXS-23" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=default;fillColor=#CC99FF;align=center;verticalAlign=middle;rounded=0;autosize=1;resizable=0;fontColor=#000000;gradientColor=default;" value="Project 2 - Benjamin Niccum &amp;amp; Madison Gage" vertex="1">
+          <mxGeometry height="30" width="270" x="610" y="20" as="geometry" />
         </mxCell>
-        <mxCell id="IZJgCh1n1-sP1YJjxnXS-13" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;div&gt;Functions:&lt;/div&gt;&lt;div&gt;• run()&lt;/div&gt;&lt;div&gt;• listen_for_requests()&lt;/div&gt;&lt;div&gt;• receive_computation_request()&lt;/div&gt;&lt;div&gt;• perform_multiplication()&lt;/div&gt;&lt;div&gt;• process_computation()&lt;/div&gt;&lt;div&gt;• send_result_to_display()&lt;/div&gt;&lt;div&gt;• log_computation()&lt;/div&gt;" vertex="1">
-          <mxGeometry height="180" width="180" x="460" y="380" as="geometry" />
+        <mxCell id="iNKjuxUSMtIzWRRn6FnJ-11" edge="1" parent="1" source="iNKjuxUSMtIzWRRn6FnJ-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;startArrow=classic;startFill=1;" target="IZJgCh1n1-sP1YJjxnXS-6">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="IZJgCh1n1-sP1YJjxnXS-23" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;autosize=1;resizable=0;" value="Project 2 - Banjamin Niccum &amp;amp; Madison Gage" vertex="1">
-          <mxGeometry height="30" width="270" x="310" y="20" as="geometry" />
+        <mxCell id="iNKjuxUSMtIzWRRn6FnJ-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontColor=#000000;fillColor=#CCFFCC;gradientColor=default;gradientDirection=north;strokeColor=#000000;" value="&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;Functions:&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;•&amp;nbsp;&lt;span style=&quot;background-color: transparent;&quot;&gt;void run();&lt;/span&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void listen_for_requests();&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;int receive_computation_request();&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void perform_addition(struct ComputationResult info);&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void perform_subtraction(struct ComputationResult info);&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void perform_multiplication(struct ComputationResult info);&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void perform_division(struct ComputationResult info);&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void validate_division();&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void process_computation(struct ComputationResult info);&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void&amp;nbsp;&lt;span style=&quot;background-color: transparent;&quot;&gt;send_result_to_display(struct ComputationResult info);&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void log_computation(struct ComputationResult info);&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="210" width="340" x="770" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="iNKjuxUSMtIzWRRn6FnJ-9" edge="1" parent="1" source="iNKjuxUSMtIzWRRn6FnJ-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;startArrow=classic;startFill=1;" target="IZJgCh1n1-sP1YJjxnXS-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="iNKjuxUSMtIzWRRn6FnJ-6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontColor=#000000;fillColor=#CCFFCC;gradientColor=default;gradientDirection=north;strokeColor=#000000;" value="&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;Functions:&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;•&amp;nbsp;&lt;span style=&quot;background-color: transparent;&quot;&gt;void run();&lt;/span&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void listen_for_requests();&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;int receive_computation_request();&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void perform_addition(struct ComputationResult info);&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void perform_subtraction(struct ComputationResult info);&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void perform_multiplication(struct ComputationResult info);&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void perform_division(struct ComputationResult info);&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void validate_division();&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void process_computation(struct ComputationResult info);&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void&amp;nbsp;&lt;span style=&quot;background-color: transparent;&quot;&gt;send_result_to_display(struct ComputationResult info);&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void log_computation(struct ComputationResult info);&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="210" width="340" x="410" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="iNKjuxUSMtIzWRRn6FnJ-8" edge="1" parent="1" source="iNKjuxUSMtIzWRRn6FnJ-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;startArrow=classic;startFill=1;" target="IZJgCh1n1-sP1YJjxnXS-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="iNKjuxUSMtIzWRRn6FnJ-7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontColor=#000000;fillColor=#CCFFCC;gradientColor=default;gradientDirection=north;strokeColor=#000000;" value="&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;Functions:&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;•&amp;nbsp;&lt;span style=&quot;background-color: transparent;&quot;&gt;void run();&lt;/span&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void listen_for_requests();&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;int receive_computation_request();&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void perform_addition(struct ComputationResult info);&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void perform_subtraction(struct ComputationResult info);&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void perform_multiplication(struct ComputationResult info);&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void perform_division(struct ComputationResult info);&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void validate_division();&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void process_computation(struct ComputationResult info);&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void&amp;nbsp;&lt;span style=&quot;background-color: transparent;&quot;&gt;send_result_to_display(struct ComputationResult info);&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;•&amp;nbsp;&lt;/span&gt;void log_computation(struct ComputationResult info);&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="210" width="340" x="50" y="380" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

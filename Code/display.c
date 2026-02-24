@@ -31,7 +31,7 @@ void receive_computation_result();
 void store_result(struct ComputationResult info);
 void organize_results_by_type();
 void receive_completion_signal();
-void generate_output();
+//void generate_output();
 void calculate_statistics(struct ComputationResult info, bool print);
 void display_to_console();
 void send_termination_signals();
@@ -137,9 +137,9 @@ void store_result(struct ComputationResult info){
     calculate_statistics(info, 0);
 };
 
-void organize_results_by_type(){
-    // Organizes stored results by operation type for output
-};
+// void organize_results_by_type(){
+//     // Organizes stored results by operation type for output
+// };
 
 void receive_completion_signal(){
     // Receives completion signal from UI node (rank 0)
@@ -156,10 +156,10 @@ void receive_completion_signal(){
     printf("UI node finished. Expecting %d total results.\n", expected_results);
 };
 
-void generate_output(){
-    // Generates output file with all results
-    //FILE *file = fopen("computation_reults")
-};
+// void generate_output(){
+//     // Generates output file with all results
+//     //FILE *file = fopen("computation_reults")
+// };
 
 void calculate_statistics(struct ComputationResult info, bool print){
     // Calculates statistics such as total computations and average time
