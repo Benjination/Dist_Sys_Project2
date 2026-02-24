@@ -8,7 +8,7 @@
 % Title page information
 \title{Distributed Systems Project 2: Design, Implementation, and Evaluation of a Distributed Computing System}
 
-\author{Madison Gage \\ Benjamin Niccum \\ University of Texas at Arlington \\ CSE 5306 - Distributed Systems \\ Spring 2026}
+\author{Madison Gage \\ Benjamin Niccum \\ University of Texas at Arlington \\ CSE 5306 - Distributed Systems \\ Spring 2026 \\ Github Repo: https://github.com/Benjination/Dist\_Sys\_Project2}
 
 \date{\today}
 
@@ -111,9 +111,8 @@ System coordination relies on count-based validation and structured termination 
 \textbf{Error Management:}
 Error handling is integrated throughout the system workflow, with computation nodes detecting and reporting errors through standardized status codes. The display node processes both successful results and error conditions uniformly, maintaining system stability and providing comprehensive error reporting to users.
 
-
-
 \subsection{Communication Model}
+
 This section provides detailed technical specifications for the MPI-based communication infrastructure that enables reliable message passing across the distributed arithmetic system.
 
 \textbf{MPI Implementation Architecture:}
@@ -172,6 +171,7 @@ The point-to-point communication model scales linearly with node count, avoiding
 Bandwidth utilization remains constant per computation regardless of total system load, providing predictable performance characteristics for capacity planning. The communication protocol supports heterogeneous processing rates across computation nodes without requiring explicit load balancing mechanisms.
 
 
+
 \section{Functional Requirements}
 
 This section details the six functional requirements that our distributed system supports:
@@ -195,7 +195,7 @@ Four dedicated computation nodes are deployed, each specialized for one arithmet
 The system shall implement reliable message passing between nodes using MPI with error detection and graceful handling of node failures.
 
 \textbf{Implementation:} 
-MPI message passing is implemented with structured communication protocols using defined message tags (COMPUTE_TAG, RESULT_TAG, TERMINATE_TAG). The system includes error status tracking within the ComputationResult struct, handles division-by-zero gracefully, and implements proper termination synchronization to ensure all nodes shut down cleanly.
+MPI message passing is implemented with structured communication protocols using defined message tags (COMPUTE\_TAG, RESULT\_TAG, TERMINATE\_TAG). The system includes error status tracking within the ComputationResult struct, handles division-by-zero gracefully, and implements proper termination synchronization to ensure all nodes shut down cleanly.
 
 \subsection{Requirement 4: Synchronous Result Aggregation}
 \textbf{Description:} 
@@ -209,7 +209,7 @@ The display node serves as the centralized result aggregator, collecting all com
 The system shall collect timing metrics, throughput statistics, and system performance data across all distributed components in real-time.
 
 \textbf{Implementation:} 
-Each computation node records execution timing using MPI_Wtime() functions, capturing precise computation duration. The display node aggregates timing data and generates statistical analytics including total computations processed, average computation times per operation type, and overall system throughput metrics. Results are stored persistently in CSV format for analysis.
+Each computation node records execution timing using MPI\_Wtime() functions, capturing precise computation duration. The display node aggregates timing data and generates statistical analytics including total computations processed, average computation times per operation type, and overall system throughput metrics. Results are stored persistently in CSV format for analysis.
 
 \subsection{Requirement 6: Scalable Container Orchestration}
 \textbf{Description:} 
@@ -221,8 +221,7 @@ The system is fully containerized using Docker with Docker Compose orchestration
 \section{Implementation Details}
 
 \subsection{Technology Stack}
-
-The system utilizes a focused technology stack optimized for high-performance distributed computing:
+% List and justify the technologies used
 
 \textbf{Programming Language:} C - Selected for its performance efficiency, low-level system control, and native MPI support. C provides optimal execution speed for arithmetic computations and minimal overhead for inter-process communication.
 
@@ -235,6 +234,7 @@ The system utilizes a focused technology stack optimized for high-performance di
 \textbf{Database:} N/A - Results are stored in CSV format for simplicity and portability, eliminating the need for database infrastructure while maintaining data persistence and analysis capabilities.
 
 \textbf{Monitoring:} N/A - Performance monitoring is implemented through built-in MPI timing functions and custom analytics within the display node, providing sufficient metrics collection without external monitoring tools.
+
 
 \subsection{MPI Implementation}
 % Detail your MPI service definitions and implementation
@@ -258,15 +258,20 @@ The system utilizes a focused technology stack optimized for high-performance di
 
 \subsection{Evaluation Framework}
 % Describe your approach to evaluating the system
+The evaluation compares distributed arithmetic processing against centralized single-node processing to assess the performance characteristics, scalability benefits, and overhead costs of the distributed architecture. Testing methodology includes varying workload sizes from small interactive requests to large batch processing operations to evaluate system behavior under different load conditions.
 
 \subsection{Comparison Systems}
 This evaluation compares two system designs:
 
 \subsubsection{Distributed Design}
 % Describe your main distributed system design
+The six-node containerized system using MPI communication with specialized computation nodes. Each operation type is processed by a dedicated node, enabling parallel processing and distributed load handling.
+
 
 \subsubsection{Centralized Design}
 % Describe the alternative centralized design for comparison
+The localProcessingTest.c single-file implementation that processes all operations sequentially on a single node without MPI overhead. This serves as the performance baseline for comparison.
+
 
 \subsection{Performance Metrics}
 The following metrics are used to evaluate system performance:
@@ -279,12 +284,20 @@ The following metrics are used to evaluate system performance:
 \end{itemize}
 
 \subsection{Workload Specifications}
-% Detail the different workloads used for testing
+Testing includes three workload categories:
+\begin{itemize}
+    \item Small workload: 10-50 operations (interactive simulation)
+    \item Medium workload: 100-500 operations (moderate batch processing)
+    \item Large workload: 1000+ operations (high-volume batch processing)
+\end{itemize}
+Each workload contains balanced operation types (25\% each of +, -, *, /) to ensure fair comparison across specialized nodes.
+
 
 \section{Experimental Setup}
 
 \subsection{Hardware Environment}
 % Describe the hardware used for experiments
+Machine 1:
 
 CPU: [CPU Details]
 
@@ -296,14 +309,21 @@ Network: [Network Details]
 
 Operating System: [OS Details]
 
+
 \subsection{Node Configuration}
 % Explain how the six nodes are configured and deployed
+Distributed system deploys six Docker containers (1 UI + 4 computation + 1 display) with MPI communication configured for localhost networking. Centralized system runs as single executable on host machine.
+
 
 \subsection{Test Environment Setup}
 % Detail the setup process and configuration
+Docker containers initialized with shared network namespace for MPI communication. Test data files prepared with specified workload sizes. Timing measurements collected through built-in computation result timing functionality.
+
 
 \subsection{Measurement Tools}
 % Describe tools used for performance measurement
+Built-in timing system using computation result time tracking. Performance data collected via CSV output files with statistical analysis performed by display node functionality.
+
 
 \section{Results and Analysis}
 
@@ -347,8 +367,11 @@ Centralized System:
 
 \subsection{Performance Analysis}
 % Analyze and interpret the results
+The distributed architecture shows ??? performance characteristics compared to centralized processing. Key findings include ??? overhead from MPI communication and container orchestration, versus ??? benefits from parallel processing capabilities.
+
 
 \section{System Design Trade-offs}
+
 
 \subsection{Distributed vs. Centralized Architecture}
 
@@ -370,12 +393,16 @@ Centralized System:
 
 \subsection{Communication Model Trade-offs}
 % Discuss MPI advantages and limitations
+MPI provides reliable message delivery and strong ordering guarantees but introduces communication overhead. Blocking communication ensures consistency but may limit throughput compared to asynchronous alternatives.
 
 \subsection{Containerization Benefits and Costs}
 % Analyze Docker containerization impact
+Docker enables portable deployment and consistent environments but adds startup overhead and resource isolation costs. Container orchestration simplifies deployment complexity while introducing additional failure points.
 
 \subsection{Overall System Trade-offs}
 % Summarize the key trade-offs identified
+The distributed design prioritizes learning objectives and scalability demonstration over raw performance optimization. Trade-offs favor educational value and distributed systems concept illustration rather than maximum computational efficiency.
+
 
 \section{AI Tools Usage and Lessons Learned}
 
@@ -383,7 +410,7 @@ Centralized System:
 
 This project utilized two primary AI tools to enhance development productivity while maintaining clear boundaries between human-designed system architecture and AI-assisted implementation support.
 
-\textbf{GitHub Copilot:} Code completion and syntax assistance during implementation - Impact: Medium
+\textbf{GitHub Copilot:} Code completion and syntax assistance during implementation - Impact: Low
 
 \textbf{Claude Sonnet 4:} Technical writing, documentation enhancement, infrastructure configuration, and problem-solving guidance - Impact: Medium
 
@@ -427,6 +454,7 @@ Future projects should establish explicit guidelines for AI tool usage, ensuring
 AI tools provided measurable productivity improvements across multiple development phases. Infrastructure setup time was reduced significantly through automated Docker configuration generation, while documentation quality improved substantially through AI-assisted technical writing enhancement. The ability to quickly resolve complex terminal and deployment issues through AI guidance prevented extensive troubleshooting delays that could have consumed significant development time.
 
 However, the most critical development work—system architecture design, MPI communication protocols, and core algorithmic implementation—remained entirely human-driven, ensuring that the educational value and technical learning objectives of the distributed systems project were fully achieved. The AI tools served as force multipliers for human expertise rather than replacements for fundamental computer science knowledge and problem-solving skills.
+
 
 \section{Conclusion}
 
