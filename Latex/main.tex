@@ -380,38 +380,53 @@ Centralized System:
 \section{AI Tools Usage and Lessons Learned}
 
 \subsection{AI Tools Utilized}
-% List and describe the AI tools used in the project
 
-Tool 1: [Purpose] - Impact: [High/Medium/Low]
+This project utilized two primary AI tools to enhance development productivity while maintaining clear boundaries between human-designed system architecture and AI-assisted implementation support.
 
-Tool 2: [Purpose] - Impact: [High/Medium/Low]
+\textbf{GitHub Copilot:} Code completion and syntax assistance during implementation - Impact: Medium
 
-Tool 3: [Purpose] - Impact: [High/Medium/Low]
+\textbf{Claude Sonnet 4:} Technical writing, documentation enhancement, infrastructure configuration, and problem-solving guidance - Impact: Medium
 
 \subsection{Development Process Enhancement}
 
-\subsubsection{Code Generation and Assistance}
-% Describe how AI helped with code generation
+\subsubsection{Design Phase}
+The fundamental system architecture, including the layered communication design and object-based node structure, was entirely human-conceived. Benjamin developed the core design patterns that guided the distributed system architecture, establishing the three-layer communication model and the object-based approach using the ComputationResult struct as the central data object. Madison independently designed the MPI communication protocols and result processing workflows. AI tools played no role in these critical architectural decisions, ensuring that the distributed systems concepts and design principles reflected genuine student understanding and creativity.
 
-\subsubsection{Debugging and Problem Solving}
-% Explain AI assistance in debugging
+\subsubsection{Development Phase}
+During implementation, AI assistance provided significant productivity benefits while preserving human ownership of core functionality. Benjamin developed the complete user interface (user\_Interface.c) and computation logic (computation.c), including input parsing, CSV processing, operation routing, and arithmetic processing functions. Madison created the display system (display.c) with sophisticated result aggregation, statistical analysis, and synchronization mechanisms, working independently without AI assistance.
 
-\subsubsection{Documentation and Design}
-% Discuss AI support in documentation
+GitHub Copilot provided valuable code completion assistance, particularly for standard C syntax, MPI function calls, and error handling patterns. This reduced typing overhead and helped avoid syntax errors, but did not contribute to algorithmic design or system logic. Claude Sonnet 4 assisted with code planning discussions and helped identify potential implementation approaches when Benjamin encountered complex functionality requirements.
+
+\subsubsection{Infrastructure and Testing Phase}
+AI tools proved particularly valuable for infrastructure configuration and testing support. Claude Sonnet 4 created the complete Docker containerization strategy, including the Dockerfile and multiple docker-compose.yml configurations for different deployment scenarios. The dockerization process required expertise in container orchestration and MPI deployment patterns that significantly accelerated the infrastructure setup process.
+
+Additionally, Claude Sonnet 4 generated comprehensive test data (test\_data.csv) with diverse arithmetic operations for system validation and created the localProcessingTest.c file that consolidated the distributed system functionality into a single-file local processing version for development testing. The AI also provided extensive assistance with complex terminal commands and Docker troubleshooting, which proved invaluable given the intricate nature of containerized MPI deployments.
+
+\subsubsection{Documentation Phase}
+AI assistance significantly enhanced documentation quality and academic presentation. Claude Sonnet 4 helped polish technical writing, improve grammatical structure, and ensure appropriate academic tone throughout the report. The AI transformed rough drafts and bullet points into professional technical documentation while preserving all original technical content and concepts provided by the human team members. This collaboration maintained authenticity of ideas while improving clarity and presentation quality.
 
 \subsection{Lessons Learned}
 
 \subsubsection{Effective AI Tool Usage}
-% What worked well with AI tools
+The most effective AI utilization occurred when human expertise defined the problem scope and architectural approach, with AI tools providing implementation acceleration and documentation enhancement. Claude Sonnet 4 demonstrated remarkable efficiency in finding solutions and troubleshooting approaches, often providing faster and more comprehensive guidance than traditional resources such as Stack Overflow searches or Google documentation research. The AI's ability to understand complex technical contexts and provide immediate, tailored responses significantly reduced development friction.
+
+GitHub Copilot's code completion capabilities proved most valuable for standard programming patterns and MPI syntax, reducing implementation time while allowing developers to focus on algorithmic logic rather than syntax details.
 
 \subsubsection{Limitations and Challenges}
-% What limitations were encountered
+AI tools showed clear limitations in architectural design and distributed systems conceptualization. The fundamental system design, communication patterns, and distributed computing principles required human insight and academic understanding that AI could not replicate. Additionally, complex debugging of MPI communication issues and system integration challenges required human problem-solving skills and domain expertise.
+
+The AI tools occasionally suggested overly complex solutions or architectures that would have compromised the learning objectives of the distributed systems course, requiring human judgment to maintain appropriate scope and educational focus.
 
 \subsubsection{Best Practices}
-% Recommendations for future AI tool usage
+Effective AI integration requires clear boundaries between human creative and analytical work versus AI productivity assistance. The most successful approach involved using AI tools as sophisticated research and implementation assistants rather than design decision-makers. Maintaining human ownership of architectural choices, algorithmic design, and problem-solving approaches ensured that learning objectives were met while benefiting from AI productivity enhancements.
+
+Future projects should establish explicit guidelines for AI tool usage, ensuring that core computer science concepts and distributed systems principles remain human-driven while leveraging AI capabilities for infrastructure, documentation, and implementation acceleration.
 
 \subsection{Impact on Development Efficiency}
-% Quantify the impact of AI tools on development time and quality
+
+AI tools provided measurable productivity improvements across multiple development phases. Infrastructure setup time was reduced significantly through automated Docker configuration generation, while documentation quality improved substantially through AI-assisted technical writing enhancement. The ability to quickly resolve complex terminal and deployment issues through AI guidance prevented extensive troubleshooting delays that could have consumed significant development time.
+
+However, the most critical development work—system architecture design, MPI communication protocols, and core algorithmic implementation—remained entirely human-driven, ensuring that the educational value and technical learning objectives of the distributed systems project were fully achieved. The AI tools served as force multipliers for human expertise rather than replacements for fundamental computer science knowledge and problem-solving skills.
 
 \section{Conclusion}
 
