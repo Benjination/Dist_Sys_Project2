@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <mpi.h>
+#include <time.h>
 
 #include "tags.h"
 // Synchronization variables
@@ -48,7 +49,7 @@ int main (int argc, char *argv[]) {
     
     time += MPI_Wtime();
     MPI_Reduce(&time, &totaltime, 1, MPI_DOUBLE, MPI_MAX, 5, MPI_COMM_WORLD);
-    printf("\nTime %f \xC2\xB5s\n",totaltime*1000000);
+    printf("\nTime %.2fs\n",totaltime);
     // Clean up MPI
     MPI_Finalize();
     return 0;
@@ -134,7 +135,7 @@ void store_result(struct ComputationResult info){
         exit(EXIT_FAILURE);
     }
     // RequestID,Operand1,Operand2,Operation,Result,Status,Time
-    fprintf(file, "%d,%.2f,%.2f,%d,%.2f,%d,%.6f\n",
+    fprintf(file, "%d,%.2f,%.2f,%d,%.2f,%d,%.3f\n",
         info.request_id, info.operand1, info.operand2, info.operation_type,
         info.result, info.status, info.time*1000000); // time needs to be adjusted to seconds
     fclose(file);  // Close 

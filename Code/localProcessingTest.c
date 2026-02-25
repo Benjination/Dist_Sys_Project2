@@ -61,8 +61,14 @@ void send_termination_signals();
 void cleanup_output_file();
 
 int main (int argc, char *argv[]) {
+    double timeTotal = 0;   // Total time spent on alorithm
+    clock_t start = clock();    // the start time
+    clock_t stop = clock();     // the stop time
     // Local processing - no MPI initialization needed
     printf("Local processing system started\n");
+
+    // Start timing
+    start = clock();
     
     // Initialize display system first
     initialize_output_file();
@@ -79,7 +85,12 @@ int main (int argc, char *argv[]) {
     
     // After processing all computations, display results
     display_to_console();
-    
+
+    // end clock
+    stop = clock();
+    timeTotal = (double)(stop - start) / CLOCKS_PER_SEC;
+    printf("\nTime %.6fs\n",timeTotal);
+
     return 0;
 }
 
@@ -177,13 +188,16 @@ void send_computation_request(struct ComputationResult info){
     // Operation type is still updated to maintain similarity with distributed version
     int target_rank = info.operation_type;  // Keep this for compatibility
     
-    printf("Processing request locally: ID=%d, Op=%d, %.2f %s %.2f\n", 
+#if PRINTS_COMP
+    // Log what we received for debugging
+    printf("Computation node received: ID=%d, Op=%d, %.2f %s %.2f\n", 
            info.request_id, info.operation_type, info.operand1, 
            (info.operation_type == 1) ? "+" : 
            (info.operation_type == 2) ? "-" : 
            (info.operation_type == 3) ? "*" : "/", 
            info.operand2);
-    
+#endif
+
     // Process the computation locally instead of sending via MPI
     process_computation(info);
 };
@@ -296,9 +310,10 @@ void process_computation(struct ComputationResult info)
 
 void send_result_to_display(struct ComputationResult info){
     // Sends computation result to display functions (local processing)
-    printf("Sending result to display: ID=%d, Result=%.2f, Status=%d\n",
+#if PRINTS_COMP
+    printf("Sending result back to display: ID=%d, Result=%.2f, Status=%d\n",
            info.request_id, info.result, info.status);
-           
+#endif    
     // Store result directly instead of sending via MPI
     received_results++;
     store_result(info);
@@ -369,7 +384,7 @@ void store_result(struct ComputationResult info){
         exit(EXIT_FAILURE);
     }
     // RequestID,Operand1,Operand2,Operation,Result,Status,Time
-    fprintf(file, "%d,%.2f,%.2f,%d,%.2f,%d,%.6f\n",
+    fprintf(file, "%d,%.2f,%.2f,%d,%.2f,%d,%.3f\n",
         info.request_id, info.operand1, info.operand2, info.operation_type,
         info.result, info.status, info.time);
     fclose(file);
@@ -377,9 +392,9 @@ void store_result(struct ComputationResult info){
     calculate_statistics(info, 0);
 };
 
-void organize_results_by_type(){
-    // Organizes stored results by operation type for output
-};
+// void organize_results_by_type(){
+//     // Organizes stored results by operation type for output
+// };
 
 void receive_completion_signal(){
     // Receives completion signal (handled directly in local processing)
@@ -404,11 +419,11 @@ void calculate_statistics(struct ComputationResult info, bool print){
             perror("Error opening output file");
             exit(EXIT_FAILURE);
         }
-        fprintf(file, "\n\nStatistics\nTotal Operations\nAddition: %d\nSubtraction: %d\nMultiplication: %d\nDivision: %d\nAverage Time: %.6f\n",totalOp[0],totalOp[1],totalOp[2],totalOp[3],avgTime);
+        fprintf(file, "\n\nStatistics\nTotal Operations\nAddition: %d\nSubtraction: %d\nMultiplication: %d\nDivision: %d\nAverage Time: %.2f \xC2\xB5s\n",totalOp[0],totalOp[1],totalOp[2],totalOp[3],avgTime*1000000);
         fclose(file);
 
-        printf("Addition:\t\t%d\nSubtraction:\t\t%d\nMultiplication:\t%d\nDivision:\t\t%d\nAverage time per operation: %.6f\nProcess complete. See computation_results.csv for results\n",
-                totalOp[0],totalOp[1],totalOp[2],totalOp[3],avgTime);
+        printf("Addition:\t\t%d\nSubtraction:\t\t%d\nMultiplication:\t\t%d\nDivision:\t\t%d\nAverage time per operation: %.2f \xC2\xB5s\nProcess complete. See computation_results.csv for results\n",
+                totalOp[0],totalOp[1],totalOp[2],totalOp[3],avgTime*1000000);
     }
 };
 
