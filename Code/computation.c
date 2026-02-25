@@ -28,14 +28,18 @@ void send_result_to_display(struct ComputationResult info);
 void log_computation(struct ComputationResult info);
 
 int main (int argc, char *argv[]) {
+    double totaltime = 0;
     // Initialize MPI
     MPI_Init(&argc, &argv);
+    double time = -MPI_Wtime();
     
     printf("Computation node started - ready to process operations\n");
-    
+
     run();
     
-    // Clean up MPI
+    time += MPI_Wtime();
+    MPI_Reduce(&time, &totaltime, 1, MPI_DOUBLE, MPI_MAX, 5, MPI_COMM_WORLD);
+    //printf("\nTime %f \xC2\xB5s\n",totaltime*1000000);
     MPI_Finalize();
     return 0;
 }
@@ -71,6 +75,7 @@ int receive_computation_request(){
         return -1;
     }
     
+#if PRINTS_COMP
     // Log what we received for debugging
     printf("Computation node received: ID=%d, Op=%d, %.2f %s %.2f\n", 
            info.request_id, info.operation_type, info.operand1, 
@@ -78,6 +83,7 @@ int receive_computation_request(){
            (info.operation_type == 2) ? "-" : 
            (info.operation_type == 3) ? "*" : "/", 
            info.operand2);
+#endif
     
     // Process the computation
     process_computation(info);
@@ -155,14 +161,19 @@ void process_computation(struct ComputationResult info)
 
 void send_result_to_display(struct ComputationResult info){
     // Sends computation result back to display node
+#if PRINTS_COMP
     printf("Sending result back to display: ID=%d, Result=%.2f, Status=%d\n",
            info.request_id, info.result, info.status);
+#endif
            
     MPI_Send(&info, sizeof(struct ComputationResult), MPI_BYTE, 
                                5, RESULT_TAG, MPI_COMM_WORLD);
 };
 
 void log_computation(struct ComputationResult info){
+#if PRINTS_COMP
     // Logs computation details for auditing
     printf("Logged computation: Request ID %d, Operation %d, Operands %.2f and %.2f, Result %.2f, Status %d\n",
-           info.request_id, info.operation_type, info.operand1, info.operand2, info.result, info.status);};
+           info.request_id, info.operation_type, info.operand1, info.operand2, info.result, info.status);
+#endif
+};

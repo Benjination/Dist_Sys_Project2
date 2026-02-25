@@ -24,8 +24,10 @@ void send_computation_request(struct ComputationResult info);
 void send_completion_signal(int total_operations);
 
 int main (int argc, char *argv[]) {
+    double totaltime = 0;
     // Initialize MPI
     MPI_Init(&argc, &argv);
+    double time = -MPI_Wtime();
     
     if (argc > 1) {
         // CSV file provided
@@ -37,6 +39,9 @@ int main (int argc, char *argv[]) {
         process_interactive_input();
     }
     
+    time += MPI_Wtime();
+    MPI_Reduce(&time, &totaltime, 1, MPI_DOUBLE, MPI_MAX, 5, MPI_COMM_WORLD);
+    //printf("\nTime %f \xC2\xB5s\n",totaltime*1000000);
     // Clean up MPI
     MPI_Finalize();
     return 0;

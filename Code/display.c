@@ -39,11 +39,16 @@ void cleanup_output_file();
 
 
 int main (int argc, char *argv[]) {
+    double totaltime = 0;
     // Initialize MPI
     MPI_Init(&argc, &argv);
+    double time = -MPI_Wtime();
     
     run();
     
+    time += MPI_Wtime();
+    MPI_Reduce(&time, &totaltime, 1, MPI_DOUBLE, MPI_MAX, 5, MPI_COMM_WORLD);
+    printf("\nTime %f \xC2\xB5s\n",totaltime*1000000);
     // Clean up MPI
     MPI_Finalize();
     return 0;
@@ -131,7 +136,7 @@ void store_result(struct ComputationResult info){
     // RequestID,Operand1,Operand2,Operation,Result,Status,Time
     fprintf(file, "%d,%.2f,%.2f,%d,%.2f,%d,%.2f\n",
         info.request_id, info.operand1, info.operand2, info.operation_type,
-        info.result, info.status, info.time); // time needs to be adjusted to seconds
+        info.result, info.status, info.time*1000000); // time needs to be adjusted to seconds
     fclose(file);  // Close 
     
     calculate_statistics(info, 0);
@@ -176,11 +181,11 @@ void calculate_statistics(struct ComputationResult info, bool print){
             perror("Error opening output file");
             exit(EXIT_FAILURE);
         }
-        fprintf(file, "\n\nStatistics\nTotal Operations\nAddition: %d\nSubtraction: %d\nMultiplication: %d\nDivision: %d\nAverage Time: %.2f\n",totalOp[0],totalOp[1],totalOp[2],totalOp[3],avgTime);
+        fprintf(file, "\n\nStatistics\nTotal Operations\nAddition: %d\nSubtraction: %d\nMultiplication: %d\nDivision: %d\nAverage Time: %.2f\n",totalOp[0],totalOp[1],totalOp[2],totalOp[3],avgTime*1000000);
         fclose(file);  // Close
 
-        printf("Addition:\t\t%d\nSubtraction:\t\t%d\nMultiplication:\t%d\nDivision:\t\t%d\nAverage time per operation: %.2f\nProcess complete. See /app/results/computation_results.csv for results\n",
-                totalOp[0],totalOp[1],totalOp[2],totalOp[3],avgTime);
+        printf("Addition:\t\t%d\nSubtraction:\t\t%d\nMultiplication:\t\t%d\nDivision:\t\t%d\nAverage time per operation: %.2f\nProcess complete. See /app/results/computation_results.csv for results\n",
+                totalOp[0],totalOp[1],totalOp[2],totalOp[3],avgTime*1000000);
     }
 };
 
