@@ -33,9 +33,10 @@ int main (int argc, char *argv[]) {
     // Initialize MPI
     MPI_Init(&argc, &argv);
     double time = -MPI_Wtime();
-    start = clock();
     
+#if PRINTS_COMP
     printf("Computation node started - ready to process operations\n");
+#endif
 
     run();
     
