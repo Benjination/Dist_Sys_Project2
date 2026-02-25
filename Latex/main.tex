@@ -1,0 +1,486 @@
+\documentclass{article}
+
+% Only basic packages for text and images
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{float}
+
+% Title page information
+\title{Distributed Systems Project 2: Design, Implementation, and Evaluation of a Distributed Computing System}
+
+\author{Madison Gage \\ Benjamin Niccum \\ University of Texas at Arlington \\ CSE 5306 - Distributed Systems \\ Spring 2026 \\ Github Repo: https://github.com/Benjination/Dist\_Sys\_Project2}
+
+\date{\today}
+
+\begin{document}
+
+% Title page
+\maketitle
+\thispagestyle{empty}
+\newpage
+
+% Table of Contents
+\tableofcontents
+\newpage
+
+\section{Introduction}
+
+This report presents the design, implementation, and evaluation of a distributed system that addresses fundamental challenges in distributed computing. The project demonstrates practical experience with system architecture trade-offs, communication models, performance optimization, and scalability considerations.
+
+\subsection{Project Overview}
+% Provide a brief overview of what the system does and its purpose
+
+This project presents a distributed arithmetic processing system designed to demonstrate key principles of distributed computing through practical implementation. The system processes mathematical operations (addition, subtraction, multiplication, and division) across a network of containerized nodes, providing both interactive and batch processing capabilities.
+
+\textbf{System Capabilities:} The arithmetic machine accepts computational requests through two primary input methods: manual entry via an interactive command-line interface, or automated batch processing from CSV files containing multiple operations. This dual-input approach enables evaluation of system performance under both lightweight interactive workloads and high-throughput batch scenarios.
+
+\textbf{Deployment Architecture:} The system is fully containerized using Docker technology, requiring only a Docker installation on the target computing environment. Users can deploy the complete system by pulling the project from an online repository and executing the included build scripts, which utilize Docker Compose configurations to orchestrate the multi-node deployment.
+
+\textbf{Distributed Processing Model:} The system employs a six-node distributed architecture comprising:
+\begin{itemize}
+    \item One user interface node responsible for input validation and request routing
+    \item Four specialized computation nodes, each dedicated to a specific arithmetic operation type
+    \item One display node that aggregates results, performs statistical analysis, and manages output
+\end{itemize}
+
+\textbf{Workflow Process:} When arithmetic operations are submitted, the user interface node validates input data and intelligently routes requests to the appropriate computation node based on the operation type. Following computation, results are forwarded to the display node, which stores the data persistently, generates computational statistics, and presents formatted output to the user. This architecture demonstrates load distribution, specialized processing, and centralized result aggregation patterns common in distributed systems.
+
+
+\subsection{Objectives}
+The primary objectives of this project include:
+\begin{itemize}
+    \item Design and implement a distributed system supporting six functional requirements
+    \item Utilize microservice/object-based/resource-based architecture patterns
+    \item Implement MPI as the primary communication model
+    \item Deploy the system across six containerized nodes using Docker
+    \item Evaluate performance and scalability trade-offs
+    \item Document the role of AI tools in the development process
+\end{itemize}
+
+\subsection{Report Structure}
+This report is organized as follows: the system architecture and design decisions are described first, followed by the six functional requirements, implementation details including containerization and MPI communication, evaluation methodology, experimental results, system design trade-offs, AI tool usage, and conclusions.
+
+\section{System Design and Architecture}
+
+\subsection{Architecture Overview}
+% Describe your chosen architecture (microservice/object-based/resource-based)
+% Include system architecture diagram
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/system_architecture.png}
+    \caption{System Architecture Overview}
+\end{figure}
+
+We employed two prominent design principles during our project planning phase that guided the overall system architecture and implementation approach.
+
+\textbf{Layered Communication Architecture:} The first design principle follows a simple layered approach for inter-node communication. The architecture consists of three distinct layers:
+
+The top layer is the user interface, which communicates directly with users to gather computation requests. Once all operations are collected, the user interface sends messages to the second layer—the computation layer. The computation layer consists of four identical nodes running the same code, but each node is specialized to handle only one specific operation type (addition, subtraction, multiplication, or division).
+
+The user interface layer primarily communicates with the computation layer throughout the processing phase. However, there is one important exception: a single termination message is sent directly to the third layer—the display layer—after all computations have been dispatched. This termination signal includes the expected number of computations and ensures proper synchronization. The display layer compares the expected count with the actual received count, and when they match, it sends termination signals back to the computation nodes, allowing them to safely end their processes. Finally, the display node completes its statistical analysis before terminating its own program.
+
+\textbf{Object-Based Node Design:} The second design principle zooms in closer to the code level and follows an object-based approach. Each node functions as an object with one primary attribute—its running state—and several associated functions. Initially, all nodes start in a "not running" state, which toggles to "running" when the user activates the system. The nodes toggle back to "not running" when they receive a termination signal.
+
+The core data object in our system is a struct called ComputationResult that gets passed between nodes throughout the entire process. For each computation that runs through the system, three instances of this struct are created, and the information is transferred from node to node using MPI functions. The ComputationResult struct contains seven key attributes: operation\_type, operand1, operand2, result, request\_id, status, and time. These attributes are updated and utilized by different functions as the computation progresses through the distributed system.
+
+
+\subsection{Component Interaction}
+
+The distributed arithmetic system operates through coordinated interactions between six specialized nodes, each fulfilling distinct roles in the computational workflow. This section outlines the high-level communication flows, data lifecycle, and coordination mechanisms that enable distributed processing.
+
+\textbf{System Workflow Overview:}
+
+The computational workflow follows a structured three-phase pattern: request initiation, distributed processing, and result aggregation. Users interact exclusively with the user interface node, which serves as both the entry point and coordinator for all computational activities. The four computation nodes operate as specialized processors, while the display node manages result collection and system output.
+
+\textbf{Request Distribution Phase:}
+The user interface node accepts computational requests through dual input mechanisms and performs critical preprocessing functions including input validation, data structure creation, and intelligent request routing. Based on operation type, requests are distributed to specialized computation nodes: addition (node 1), subtraction (node 2), multiplication (node 3), and division (node 4). This specialization enables parallel processing of different operation types while maintaining focused computational expertise.
+
+\textbf{Distributed Processing Phase:}
+Computation nodes operate independently and asynchronously, processing incoming requests without coordination overhead between nodes. Each node performs arithmetic calculations, timing measurements, and error detection before generating structured results. The absence of inter-computation-node communication maximizes processing efficiency and eliminates potential synchronization bottlenecks.
+
+\textbf{Result Aggregation Phase:}
+The display node serves as the centralized collector for all computation results, implementing sophisticated tracking mechanisms to ensure completeness and consistency. It maintains comprehensive statistics, performs result validation, generates output files, and coordinates orderly system termination. The aggregation process includes real-time statistical analysis and persistent storage of all computational results.
+
+\textbf{Data Lifecycle Management:}
+The ComputationResult structure serves as the primary data container throughout the system lifecycle. Initially created and populated in the user interface, the structure travels through computation nodes where results and timing data are added, finally arriving at the display node for aggregation and analysis. This consistent data format ensures reliable information flow across all system components.
+
+\textbf{Coordination and Synchronization:}
+System coordination relies on count-based validation and structured termination protocols. The user interface communicates expected computation counts to the display node, enabling validation of result completeness. Once all expected results are received, the display node initiates coordinated shutdown of all computation nodes, ensuring graceful system termination without data loss.
+
+\textbf{Error Management:}
+Error handling is integrated throughout the system workflow, with computation nodes detecting and reporting errors through standardized status codes. The display node processes both successful results and error conditions uniformly, maintaining system stability and providing comprehensive error reporting to users.
+
+\subsection{Communication Model}
+
+This section provides detailed technical specifications for the MPI-based communication infrastructure that enables reliable message passing across the distributed arithmetic system.
+
+\textbf{MPI Implementation Architecture:}
+
+The communication implementation utilizes core MPI functions optimized for blocking point-to-point communication. MPI\_Send() provides synchronous message transmission with guaranteed delivery confirmation, while MPI\_Recv() enables flexible message reception with source address wildcarding through MPI\_ANY\_SOURCE parameters. The MPI\_COMM\_WORLD communicator establishes a unified communication domain encompassing all six system nodes, identified through rank-based addressing (0-5).
+
+Process initialization and cleanup utilize MPI\_Init() and MPI\_Finalize() to establish proper communication environment management, ensuring clean resource allocation and deallocation across distributed nodes. The blocking communication model eliminates buffer management complexity while providing strong consistency guarantees for message ordering and delivery.
+
+\textbf{Protocol Specification and Message Tags:}
+
+The message classification system implements four distinct tag protocols optimized for semantic message routing:
+
+\begin{itemize}
+\item \texttt{ALU\_TAG (0x01)}: Request transmission from UI node to computation nodes
+\item \texttt{RESULT\_TAG (0x02)}: Result transmission from computation nodes to display node  
+\item \texttt{COUNT\_TAG (0x03)}: Expected count transmission for synchronization validation
+\item \texttt{TERMINATE\_TAG (0x04)}: Shutdown coordination broadcast to computation nodes
+\end{itemize}
+
+Tag-based routing eliminates message parsing overhead by enabling immediate semantic interpretation at reception, while message multiplexing capabilities allow multiple message types to coexist on the same communication channels without interference.
+
+\textbf{Binary Serialization and Data Format:}
+
+Struct transmission utilizes MPI\_BYTE datatype specification for direct binary serialization, eliminating text conversion overhead and preserving complete floating-point precision. The fixed-structure layout ensures consistent memory alignment across heterogeneous architectures:
+
+\begin{verbatim}
+struct ComputationResult {
+    int operation_type;    // 4 bytes: 1-4 operation codes
+    double operand1;       // 8 bytes: IEEE 754 double precision
+    double operand2;       // 8 bytes: IEEE 754 double precision  
+    double result;         // 8 bytes: computed result value
+    int request_id;        // 4 bytes: sequential identifier
+    int status;            // 4 bytes: error/success codes
+    double time;           // 8 bytes: execution timing data
+} // Total: 44 bytes fixed structure
+\end{verbatim}
+
+Binary transmission provides deterministic serialization performance and eliminates platform-specific text encoding issues, while the fixed-size structure enables predictable bandwidth utilization and memory management.
+
+\textbf{Network Performance Optimization:}
+
+The communication protocol prioritizes low-latency transmission through direct MPI\_Send operations, avoiding buffered or asynchronous alternatives that introduce scheduling overhead. Blocking semantics prevent buffer overflow conditions and provide natural backpressure mechanisms that regulate computation node processing rates.
+
+Memory efficiency is maximized through in-place struct transmission without additional copying operations, while the binary format minimizes network bandwidth requirements compared to text-based protocols. Tag-based message dispatch enables zero-copy routing to appropriate handler functions upon reception.
+
+\textbf{Reliability and Fault Detection:}
+
+MPI's inherent reliability mechanisms provide guaranteed message delivery between functioning nodes, with automatic retransmission and error recovery handled transparently by the MPI implementation. Message ordering preservation ensures that sequential requests from the UI node arrive at computation nodes in transmission order, critical for maintaining request\_id correlation.
+
+The communication layer implements robust error detection through MPI return code validation and embedded status field verification. Timeout protection is provided through MPI's blocking semantics, which prevent indefinite waiting conditions while maintaining system responsiveness.
+
+\textbf{Scalability and Performance Characteristics:}
+
+The point-to-point communication model scales linearly with node count, avoiding broadcast bottlenecks or centralized message routing overhead. Direct addressing through MPI ranks eliminates directory lookup requirements, while the tag-based protocol ensures O(1) message classification performance regardless of system size.
+
+Bandwidth utilization remains constant per computation regardless of total system load, providing predictable performance characteristics for capacity planning. The communication protocol supports heterogeneous processing rates across computation nodes without requiring explicit load balancing mechanisms.
+
+
+
+\section{Functional Requirements}
+
+This section details the six functional requirements that our distributed system supports:
+
+\subsection{Requirement 1: Distributed Input Processing}
+\textbf{Description:} 
+The system shall accept computational requests through both interactive CLI and batch CSV processing, with input validation and request queuing across distributed nodes.
+
+\textbf{Implementation:} 
+The user interface node implements dual input modes: an interactive command-line interface for manual operation entry and a CSV file parser for batch processing. Input validation occurs at the UI node level, checking for proper arithmetic format, valid operation types, and numeric operand formats. The system queues validated requests and distributes them to appropriate computation nodes based on operation type.
+
+\subsection{Requirement 2: Parallel Arithmetic Operations}
+\textbf{Description:} 
+The system shall process addition, subtraction, multiplication, and division operations concurrently across specialized computation nodes with load balancing.
+
+\textbf{Implementation:} 
+Four dedicated computation nodes are deployed, each specialized for one arithmetic operation type. The UI node implements intelligent routing to distribute operations to the appropriate specialized node. Each computation node runs identical code but processes only its assigned operation type, enabling true parallel processing of different arithmetic operations simultaneously.
+
+\subsection{Requirement 3: Fault-Tolerant Communication}
+\textbf{Description:} 
+The system shall implement reliable message passing between nodes using MPI with error detection and graceful handling of node failures.
+
+\textbf{Implementation:} 
+MPI message passing is implemented with structured communication protocols using defined message tags (COMPUTE\_TAG, RESULT\_TAG, TERMINATE\_TAG). The system includes error status tracking within the ComputationResult struct, handles division-by-zero gracefully, and implements proper termination synchronization to ensure all nodes shut down cleanly.
+
+\subsection{Requirement 4: Synchronous Result Aggregation}
+\textbf{Description:} 
+The system shall synchronize computation results from distributed nodes and maintain consistency through centralized result collection and validation.
+
+\textbf{Implementation:} 
+The display node serves as the centralized result aggregator, collecting all computation results from the four computation nodes. It implements result counting and validation by comparing expected computation counts with received results. The synchronization mechanism ensures all computations complete before statistical analysis begins and program termination occurs.
+
+\subsection{Requirement 5: Performance Monitoring and Analytics}
+\textbf{Description:} 
+The system shall collect timing metrics, throughput statistics, and system performance data across all distributed components in real-time.
+
+\textbf{Implementation:} 
+Each computation node records execution timing using MPI\_Wtime() functions, capturing precise computation duration. The display node aggregates timing data and generates statistical analytics including total computations processed, average computation times per operation type, and overall system throughput metrics. Results are stored persistently in CSV format for analysis.
+
+\subsection{Requirement 6: Scalable Container Orchestration}
+\textbf{Description:} 
+The system shall support dynamic scaling and orchestration of containerized nodes with automated deployment and termination coordination.
+
+\textbf{Implementation:} 
+The system is fully containerized using Docker with Docker Compose orchestration managing the six-node deployment. Each node runs in its own container with defined inter-container communication via MPI. The deployment includes automated container startup sequencing, network configuration for MPI communication, and coordinated shutdown procedures ensuring all containers terminate gracefully.
+
+\section{Implementation Details}
+
+\subsection{Technology Stack}
+% List and justify the technologies used
+
+\textbf{Programming Language:} C - Selected for its performance efficiency, low-level system control, and native MPI support. C provides optimal execution speed for arithmetic computations and minimal overhead for inter-process communication.
+
+\textbf{Communication:} MPI (Message Passing Interface) - Chosen as the primary communication framework for its robust support of distributed computing paradigms, reliable message delivery, and proven scalability in high-performance computing environments.
+
+\textbf{Containerization:} Docker - Employed to ensure consistent deployment environments across different systems, simplify dependency management, and enable portable distributed system deployment with minimal configuration requirements.
+
+\textbf{Orchestration:} N/A - The system uses Docker Compose for container coordination rather than complex orchestration frameworks, keeping the deployment lightweight and manageable for the six-node architecture.
+
+\textbf{Database:} N/A - Results are stored in CSV format for simplicity and portability, eliminating the need for database infrastructure while maintaining data persistence and analysis capabilities.
+
+\textbf{Monitoring:} N/A - Performance monitoring is implemented through built-in MPI timing functions and custom analytics within the display node, providing sufficient metrics collection without external monitoring tools.
+
+
+\subsection{MPI Implementation}
+% Detail your MPI service definitions and implementation
+
+\subsection{Dockerization Strategy}
+% Explain how each node is containerized
+
+\subsection{Node Architecture}
+% Describe the architecture of individual nodes
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/node_architecture.png}
+    \caption{Individual Node Architecture}
+\end{figure}
+
+\subsection{Deployment Configuration}
+% Discuss Docker Compose and deployment strategies
+
+\section{Evaluation Methodology}
+
+\subsection{Evaluation Framework}
+% Describe your approach to evaluating the system
+The evaluation compares distributed arithmetic processing against centralized single-node processing to assess the performance characteristics, scalability benefits, and overhead costs of the distributed architecture. Testing methodology includes varying workload sizes from small interactive requests to large batch processing operations to evaluate system behavior under different load conditions.
+
+\subsection{Comparison Systems}
+This evaluation compares two system designs:
+
+\subsubsection{Distributed Design}
+% Describe your main distributed system design
+The six-node containerized system using MPI communication with specialized computation nodes. Each operation type is processed by a dedicated node, enabling parallel processing and distributed load handling.
+
+
+\subsubsection{Centralized Design}
+% Describe the alternative centralized design for comparison
+The localProcessingTest.c single-file implementation that processes all operations sequentially on a single node without MPI overhead. This serves as the performance baseline for comparison.
+
+
+\subsection{Performance Metrics}
+The following metrics are used to evaluate system performance:
+
+\begin{itemize}
+    \item \textbf{Throughput:} Number of requests processed per second
+    \item \textbf{Latency:} Response time for individual requests
+    \item \textbf{Scalability:} Performance under varying workloads
+    \item \textbf{Resource Utilization:} CPU, memory, and network usage
+\end{itemize}
+
+\subsection{Workload Specifications}
+Testing includes three workload categories:
+\begin{itemize}
+    \item Small workload: 10-50 operations (interactive simulation)
+    \item Medium workload: 100-500 operations (moderate batch processing)
+    \item Large workload: 1000+ operations (high-volume batch processing)
+\end{itemize}
+Each workload contains balanced operation types (25\% each of +, -, *, /) to ensure fair comparison across specialized nodes.
+
+
+\section{Experimental Setup}
+
+\subsection{Hardware Environment}
+% Describe the hardware used for experiments
+Machine 1:
+
+CPU: [CPU Details]
+
+RAM: [Memory Details]
+
+Storage: [Storage Details]
+
+Network: [Network Details]
+
+Operating System: [OS Details]
+
+
+\subsection{Node Configuration}
+% Explain how the six nodes are configured and deployed
+Distributed system deploys six Docker containers (1 UI + 4 computation + 1 display) with MPI communication configured for localhost networking. Centralized system runs as single executable on host machine.
+
+
+\subsection{Test Environment Setup}
+% Detail the setup process and configuration
+Docker containers initialized with shared network namespace for MPI communication. Test data files prepared with specified workload sizes. Timing measurements collected through built-in computation result timing functionality.
+
+
+\subsection{Measurement Tools}
+% Describe tools used for performance measurement
+Built-in timing system using computation result time tracking. Performance data collected via CSV output files with statistical analysis performed by display node functionality.
+
+
+\section{Results and Analysis}
+
+\subsection{Performance Results}
+
+\subsubsection{Throughput Analysis}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../images/throughput_comparison.png}
+    \caption{Throughput Comparison: Distributed vs. Centralized Design}
+\end{figure}
+
+\subsubsection{Latency Analysis}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../images/latency_comparison.png}
+    \caption{Latency Comparison: Distributed vs. Centralized Design}
+\end{figure}
+
+\subsection{Scalability Results}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../images/scalability_results.png}
+    \caption{Scalability Analysis Under Varying Workloads}
+\end{figure}
+
+\subsection{Resource Utilization}
+
+Distributed System:
+- CPU Usage: [Data]\%
+- Memory Usage: [Data]\%
+- Network I/O: [Data] MB/s
+
+Centralized System:
+- CPU Usage: [Data]\%
+- Memory Usage: [Data]\%
+- Network I/O: [Data] MB/s
+
+\subsection{Performance Analysis}
+% Analyze and interpret the results
+The distributed architecture shows ??? performance characteristics compared to centralized processing. Key findings include ??? overhead from MPI communication and container orchestration, versus ??? benefits from parallel processing capabilities.
+
+
+\section{System Design Trade-offs}
+
+
+\subsection{Distributed vs. Centralized Architecture}
+
+\subsubsection{Advantages of Distributed Design}
+\begin{itemize}
+    \item \textbf{Scalability:} 
+    \item \textbf{Fault Tolerance:} 
+    \item \textbf{Performance:} 
+    \item \textbf{Resource Distribution:} 
+\end{itemize}
+
+\subsubsection{Disadvantages of Distributed Design}
+\begin{itemize}
+    \item \textbf{Complexity:} 
+    \item \textbf{Network Overhead:} 
+    \item \textbf{Consistency Challenges:} 
+    \item \textbf{Debugging Difficulty:} 
+\end{itemize}
+
+\subsection{Communication Model Trade-offs}
+% Discuss MPI advantages and limitations
+MPI provides reliable message delivery and strong ordering guarantees but introduces communication overhead. Blocking communication ensures consistency but may limit throughput compared to asynchronous alternatives.
+
+\subsection{Containerization Benefits and Costs}
+% Analyze Docker containerization impact
+Docker enables portable deployment and consistent environments but adds startup overhead and resource isolation costs. Container orchestration simplifies deployment complexity while introducing additional failure points.
+
+\subsection{Overall System Trade-offs}
+% Summarize the key trade-offs identified
+The distributed design prioritizes learning objectives and scalability demonstration over raw performance optimization. Trade-offs favor educational value and distributed systems concept illustration rather than maximum computational efficiency.
+
+
+\section{AI Tools Usage and Lessons Learned}
+
+\subsection{AI Tools Utilized}
+
+This project utilized two primary AI tools to enhance development productivity while maintaining clear boundaries between human-designed system architecture and AI-assisted implementation support.
+
+\textbf{GitHub Copilot:} Code completion and syntax assistance during implementation - Impact: Low
+
+\textbf{Claude Sonnet 4:} Technical writing, documentation enhancement, infrastructure configuration, and problem-solving guidance - Impact: Medium
+
+\subsection{Development Process Enhancement}
+
+\subsubsection{Design Phase}
+The fundamental system architecture, including the layered communication design and object-based node structure, was entirely human-conceived. Benjamin developed the core design patterns that guided the distributed system architecture, establishing the three-layer communication model and the object-based approach using the ComputationResult struct as the central data object. Madison independently designed the MPI communication protocols and result processing workflows. AI tools played no role in these critical architectural decisions, ensuring that the distributed systems concepts and design principles reflected genuine student understanding and creativity.
+
+\subsubsection{Development Phase}
+During implementation, AI assistance provided significant productivity benefits while preserving human ownership of core functionality. Benjamin developed the complete user interface (user\_Interface.c) and computation logic (computation.c), including input parsing, CSV processing, operation routing, and arithmetic processing functions. Madison created the display system (display.c) with sophisticated result aggregation, statistical analysis, and synchronization mechanisms, working independently without AI assistance.
+
+GitHub Copilot provided valuable code completion assistance, particularly for standard C syntax, MPI function calls, and error handling patterns. This reduced typing overhead and helped avoid syntax errors, but did not contribute to algorithmic design or system logic. Claude Sonnet 4 assisted with code planning discussions and helped identify potential implementation approaches when Benjamin encountered complex functionality requirements.
+
+\subsubsection{Infrastructure and Testing Phase}
+AI tools proved particularly valuable for infrastructure configuration and testing support. Claude Sonnet 4 created the complete Docker containerization strategy, including the Dockerfile and multiple docker-compose.yml configurations for different deployment scenarios. The dockerization process required expertise in container orchestration and MPI deployment patterns that significantly accelerated the infrastructure setup process.
+
+Additionally, Claude Sonnet 4 generated comprehensive test data (test\_data.csv) with diverse arithmetic operations for system validation and created the localProcessingTest.c file that consolidated the distributed system functionality into a single-file local processing version for development testing. The AI also provided extensive assistance with complex terminal commands and Docker troubleshooting, which proved invaluable given the intricate nature of containerized MPI deployments.
+
+\subsubsection{Documentation Phase}
+AI assistance significantly enhanced documentation quality and academic presentation. Claude Sonnet 4 helped polish technical writing, improve grammatical structure, and ensure appropriate academic tone throughout the report. The AI transformed rough drafts and bullet points into professional technical documentation while preserving all original technical content and concepts provided by the human team members. This collaboration maintained authenticity of ideas while improving clarity and presentation quality.
+
+\subsection{Lessons Learned}
+
+\subsubsection{Effective AI Tool Usage}
+The most effective AI utilization occurred when human expertise defined the problem scope and architectural approach, with AI tools providing implementation acceleration and documentation enhancement. Claude Sonnet 4 demonstrated remarkable efficiency in finding solutions and troubleshooting approaches, often providing faster and more comprehensive guidance than traditional resources such as Stack Overflow searches or Google documentation research. The AI's ability to understand complex technical contexts and provide immediate, tailored responses significantly reduced development friction.
+
+GitHub Copilot's code completion capabilities proved most valuable for standard programming patterns and MPI syntax, reducing implementation time while allowing developers to focus on algorithmic logic rather than syntax details.
+
+\subsubsection{Limitations and Challenges}
+AI tools showed clear limitations in architectural design and distributed systems conceptualization. The fundamental system design, communication patterns, and distributed computing principles required human insight and academic understanding that AI could not replicate. Additionally, complex debugging of MPI communication issues and system integration challenges required human problem-solving skills and domain expertise.
+
+The AI tools occasionally suggested overly complex solutions or architectures that would have compromised the learning objectives of the distributed systems course, requiring human judgment to maintain appropriate scope and educational focus.
+
+\subsubsection{Best Practices}
+Effective AI integration requires clear boundaries between human creative and analytical work versus AI productivity assistance. The most successful approach involved using AI tools as sophisticated research and implementation assistants rather than design decision-makers. Maintaining human ownership of architectural choices, algorithmic design, and problem-solving approaches ensured that learning objectives were met while benefiting from AI productivity enhancements.
+
+Future projects should establish explicit guidelines for AI tool usage, ensuring that core computer science concepts and distributed systems principles remain human-driven while leveraging AI capabilities for infrastructure, documentation, and implementation acceleration.
+
+\subsection{Impact on Development Efficiency}
+
+AI tools provided measurable productivity improvements across multiple development phases. Infrastructure setup time was reduced significantly through automated Docker configuration generation, while documentation quality improved substantially through AI-assisted technical writing enhancement. The ability to quickly resolve complex terminal and deployment issues through AI guidance prevented extensive troubleshooting delays that could have consumed significant development time.
+
+However, the most critical development work—system architecture design, MPI communication protocols, and core algorithmic implementation—remained entirely human-driven, ensuring that the educational value and technical learning objectives of the distributed systems project were fully achieved. The AI tools served as force multipliers for human expertise rather than replacements for fundamental computer science knowledge and problem-solving skills.
+
+
+\section{Conclusion}
+
+\subsection{Project Summary}
+% Summarize the key achievements of the project
+
+\subsection{Performance Insights}
+% Summarize key performance findings
+
+\subsection{Design Lessons}
+% Key lessons learned about distributed system design
+
+\subsection{Future Work}
+% Potential improvements and extensions
+
+\subsection{Final Reflections}
+% Overall reflections on the project experience
+
+% References
+\newpage
+\section{References}
+
+[1] MPI Documentation. Available: https://MPI.io/
+
+[2] Docker Documentation. Available: https://docs.docker.com/
+
+[3] Add your references here as needed
+
+\end{document}

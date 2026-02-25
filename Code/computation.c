@@ -22,10 +22,10 @@ void perform_addition(struct ComputationResult info);
 void perform_subtraction(struct ComputationResult info);
 void perform_multiplication(struct ComputationResult info);
 void perform_division(struct ComputationResult info);
-void validate_division();
+//void validate_division();
 void process_computation(struct ComputationResult info);
 void send_result_to_display(struct ComputationResult info);
-void log_computation(struct ComputationResult info);
+//void log_computation(struct ComputationResult info);
 
 int main (int argc, char *argv[]) {
     double totaltime = 0;
@@ -170,10 +170,7 @@ void send_result_to_display(struct ComputationResult info){
                                5, RESULT_TAG, MPI_COMM_WORLD);
 };
 
-void log_computation(struct ComputationResult info){
-#if PRINTS_COMP
-    // Logs computation details for auditing
-    printf("Logged computation: Request ID %d, Operation %d, Operands %.2f and %.2f, Result %.2f, Status %d\n",
-           info.request_id, info.operation_type, info.operand1, info.operand2, info.result, info.status);
-#endif
-};
+// void log_computation(struct ComputationResult info){
+//     // Logs computation details for auditing
+//     printf("Logged computation: Request ID %d, Operation %d, Operands %.2f and %.2f, Result %.2f, Status %d\n",
+//            info.request_id, info.operation_type, info.operand1, info.operand2, info.result, info.status);};

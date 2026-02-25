@@ -13,12 +13,10 @@ services:
     privileged: true
     environment:
       - DEPLOYMENT_MODE=multi-machine
-      - MACHINE1_IP=192.168.1.2  # Replace with Machine 1 IP
-      - MACHINE2_IP=192.168.1.101  # Replace with Machine 2 IP
-    ports:
-      - "2201:22"  # SSH for node1
+      - MACHINE1_IP=10.234.93.155  # Replace with Machine 1 IP
+      - MACHINE2_IP=10.234.95.154  # Replace with Machine 2 IP
     command: >
-      sh -c "/app/create-hostfile.sh && /usr/sbin/sshd -D"
+      sh -c "/app/create-hostfile.sh && /usr/sbin/sshd -D -p 22"
     
   node2:
     image: bennythepooh/mpi-distributed-system
@@ -28,12 +26,10 @@ services:
     privileged: true
     environment:
       - DEPLOYMENT_MODE=multi-machine
-      - MACHINE1_IP=192.168.1.100  # Replace with Machine 1 IP
-      - MACHINE2_IP=192.168.1.101  # Replace with Machine 2 IP
-    ports:
-      - "2202:22"  # SSH for node2
+      - MACHINE1_IP=10.234.93.155  # Replace with Machine 1 IP
+      - MACHINE2_IP=10.234.95.154  # Replace with Machine 2 IP
     command: >
-      sh -c "/app/create-hostfile.sh && /usr/sbin/sshd -D"
+      sh -c "/app/create-hostfile.sh && /usr/sbin/sshd -D -p 23"
     
   node3:
     image: bennythepooh/mpi-distributed-system
@@ -43,9 +39,7 @@ services:
     privileged: true
     environment:
       - DEPLOYMENT_MODE=multi-machine
-      - MACHINE1_IP=192.168.1.100  # Replace with Machine 1 IP
-      - MACHINE2_IP=192.168.1.101  # Replace with Machine 2 IP
-    ports:
-      - "2203:22"  # SSH for node3
+      - MACHINE1_IP=10.234.93.155  # Replace with Machine 1 IP
+      - MACHINE2_IP=10.234.95.154  # Replace with Machine 2 IP
     command: >
-      sh -c "/app/create-hostfile.sh && /usr/sbin/sshd -D"
+      sh -c "/app/create-hostfile.sh && /usr/sbin/sshd -D -p 24"

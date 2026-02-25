@@ -58,6 +58,7 @@ obj/
 # Test output files
 results.csv
 output_*.csv
+Wtext.txt
 
 # Personal notes
 notes.txt
