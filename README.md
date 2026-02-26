@@ -72,6 +72,7 @@ Project_2/
     ├── test_data.csv             # Test dataset (configurable size)
     ├── Dockerfile                # Container configuration with OpenMPI
     ├── docker-compose.yml        # 6-node orchestration setup
+    ├── docker-compose-single.yml # Single-machine deployment configuration
     └── results/                  # Output directory (mounted volume)
 ```
 
@@ -102,14 +103,20 @@ Project_2/
 
 #### Quick Start
 ```bash
-# Build and start the 6-node distributed system
-docker compose up --build -d
+# Pull the Docker image
+docker pull bennythepooh/mpi-distributed-system
 
-# Run computations with CSV file
-docker compose exec node1 mpirun -np 6 --hostfile /app/hostfile --allow-run-as-root /app/mpi_launcher.sh test_data.csv
+# Build the program
+docker build -t bennythepooh/mpi-distributed-system:latest .
+
+# Start all 6 nodes
+docker compose -f docker-compose-single.yml up -d
+
+# Run the MPI program
+docker compose -f docker-compose-single.yml exec node1 mpirun -np 6 --hostfile /app/hostfile --allow-run-as-root /app/mpi_launcher.sh test_data.csv
 
 # Stop the system
-docker compose down
+docker compose -f docker-compose-single.yml down
 ```
 
 ### CSV File Format
@@ -146,24 +153,31 @@ mpirun -np 6 ./mpi_launcher.sh test_data.csv
 
 ### Build Instructions
 ```bash
-# Build and run the distributed system
-docker compose up --build -d
+# Pull the Docker image
+docker pull bennythepooh/mpi-distributed-system
+
+# Build the program
+docker build -t bennythepooh/mpi-distributed-system:latest .
+
+# Start all 6 nodes
+docker compose -f docker-compose-single.yml up -d
 
 # Check container status
-docker compose ps
+docker compose -f docker-compose-single.yml ps
 
 # View logs from specific node
-docker compose logs node1
+docker compose -f docker-compose-single.yml logs node1
 
 # Execute commands in containers
-docker compose exec node1 bash
+docker compose -f docker-compose-single.yml exec node1 bash
 ```
 
 ### Development Workflow
 1. Edit C source files locally
-2. Rebuild containers: `docker compose up --build -d`
-3. Test with: `docker compose exec node1 mpirun -np 6 --hostfile /app/hostfile --allow-run-as-root /app/mpi_launcher.sh test_data.csv`
-4. View results and debug as needed
+2. Rebuild containers: `docker build -t bennythepooh/mpi-distributed-system:latest .`
+3. Start system: `docker compose -f docker-compose-single.yml up -d`
+4. Test with: `docker compose -f docker-compose-single.yml exec node1 mpirun -np 6 --hostfile /app/hostfile --allow-run-as-root /app/mpi_launcher.sh test_data.csv`
+5. View results and debug as needed
 
 ## Output Format
 
@@ -210,7 +224,7 @@ The system uses a fully containerized approach:
 
 ### Scalability
 The architecture supports easy scaling:
-- Add more computation nodes by modifying docker-compose.yml
+- Add more computation nodes by modifying docker-compose-single.yml
 - Extend operation types in computation.c
 - Customize CSV processing in user_Interface.c
 

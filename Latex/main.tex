@@ -67,9 +67,10 @@ This report is organized as follows: the system architecture and design decision
 % Include system architecture diagram
 
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{images/system_architecture.png}
-    \caption{System Architecture Overview}
+\centering
+\includegraphics[width=0.8\textwidth]{images/system_architecture.png}
+\caption{System Architecture Overview}
+\label{fig:system_architecture}
 \end{figure}
 
 We employed two prominent design principles during our project planning phase that guided the overall system architecture and implementation approach.
@@ -238,9 +239,18 @@ The system is fully containerized using Docker with Docker Compose orchestration
 
 \subsection{MPI Implementation}
 % Detail your MPI service definitions and implementation
+Our MPI implementation consists of basic MPI send/receive operations for message passing between nodes, one MPI reduce operation used for throughput and latency measurement, and MPI\_Wtime for time measurements.
+
+Four different send/receive operations occur: ALU, count, result, and terminate. The ALU operation is a send from node 0 that contains the struct with computing instructions to nodes 1-4, based on the type of arithmetic operation required. All addition operations go to node 1, subtraction to node 2, multiplication to node 3, and division to node 4. The count operation is a send from node 0 to node 5 containing the number of computations expected. The result operation is a send from any of the four computation nodes to node 5, accomplished using MPI\_ANY\_SOURCE with a specific tag to ensure that node 5 receives results regardless of which computation node sends them. Finally, the terminate operation is a termination instruction sent from node 5 to all other nodes, ensuring proper shutdown.
+
+Each of these four send/receive operations has its own MPI\_TAG.
+
+The MPI reduce operation collects the total runtime from each node and prints the maximum time. This approach is used because throughput and latency measurements are based on the performance of the slowest node.
+
+Timing is measured using MPI\_Wtime, with output converted to microseconds.
 
 \subsection{Dockerization Strategy}
-
+% Explain how each node is containerized
 The distributed arithmetic processing system employs Docker containerization to achieve node isolation and simulate realistic distributed computing environments. While Docker was required for the assignment, it proved to be excellent practice in building distributed systems, as the isolation of each node was very clear using Docker, simulating how the system would actually work on six separate computing devices.
 
 \textbf{Base Image Selection and Configuration}
@@ -285,8 +295,9 @@ You lose performance, but you gain scalability. Containers add networking overhe
 
 If we were actually creating a high-performance arithmetic system, there would have been better ways to connect the processes that did not require TCP/IP protocols, like connecting the nodes directly with high-speed connectors. However, a direct connection would limit geographical scaling, making the Docker approach more suitable for distributed deployments across diverse computing environments.
 
-\subsection{Node Architecture}
 
+\subsection{Node Architecture}
+% Describe the architecture of individual nodes
 Each node in the distributed system follows a identical foundational architecture with role-specific customizations that enable specialized processing capabilities. The standardized node design ensures consistent deployment and communication while allowing functional differentiation across the six-node topology.
 
 \textbf{Common Node Foundation}
@@ -322,13 +333,22 @@ Each node follows a standardized state machine model: initialization, active pro
 Graceful termination ensures proper resource cleanup and result persistence. Computation nodes respond to termination signals by completing active computations and updating status indicators. The display node implements a comprehensive shutdown sequence that validates result completeness before terminating the entire system.
 
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.6\textwidth]{images/node_architecture.png}
-    \caption{Individual Node Architecture}
+\centering
+\includegraphics[width=0.8\textwidth]{images/node_architecture.png}
+\caption{Individual Node Architecture}
+\label{fig:node_architecture}
 \end{figure}
 
 \subsection{Deployment Configuration}
-% Discuss Docker Compose and deployment strategies
+The system utilizes Docker Compose for orchestrated multi-container deployment across development and testing environments. The docker-compose.yml configuration defines six specialized services with custom networking and volume management.
+
+\textbf{Service Configuration:} Each node operates as an independent Docker service with dedicated hostnames (distributed\_node1 through distributed\_node6) and static IP assignments within a custom bridge network. The configuration ensures predictable inter-container communication essential for MPI hostfile addressing.
+
+\textbf{Volume Management:} Shared volume mounts enable result persistence and source code distribution across all containers. The results directory maps to the host filesystem, providing access to computation\_results.csv files after container termination.
+
+\textbf{Dependency Management:} Service dependencies ensure proper startup sequencing, with computation and display nodes waiting for complete network establishment before initialization. The orchestration handles container lifecycle management and graceful shutdown coordination.
+
+\textbf{Development vs. Production:} Multiple Docker Compose configurations support different deployment scenarios: single-machine testing (docker-compose-single.yml), distributed deployment across multiple hosts (docker-compose-machine1.yml, docker-compose-machine2.yml), and development environments with debugging capabilities.
 
 \section{Evaluation Methodology}
 
@@ -372,18 +392,17 @@ Each workload contains balanced operation types (25\% each of +, -, *, /) to ens
 \section{Experimental Setup}
 
 \subsection{Hardware Environment}
-% Describe the hardware used for experiments
-Machine 1:
+Testing was conducted on a development workstation with the following specifications:
 
-CPU: [CPU Details]
+CPU: MacBook Pro M1
 
-RAM: [Memory Details]
+RAM: 8GB unified memory
 
-Storage: [Storage Details]
+Storage: 2.45TB SSD
 
-Network: [Network Details]
+Network: UTA WiFi with Docker bridge networking (172.30.0.0/24 subnet)
 
-Operating System: [OS Details]
+Operating System: macOS Sonoma 14.1.1 with Docker Desktop for container orchestration
 
 
 \subsection{Node Configuration}
@@ -408,42 +427,53 @@ Built-in timing system using computation result time tracking. Performance data 
 \subsubsection{Throughput Analysis}
 
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{../images/throughput_comparison.png}
-    \caption{Throughput Comparison: Distributed vs. Centralized Design}
+\centering
+\includegraphics[width=0.8\textwidth]{images/AvgThroughput.png}
+\caption{Average Throughput Comparison}
+\label{fig:avg_throughput}
 \end{figure}
 
 \subsubsection{Latency Analysis}
 
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{../images/latency_comparison.png}
-    \caption{Latency Comparison: Distributed vs. Centralized Design}
+\centering
+\includegraphics[width=0.8\textwidth]{images/Avg_Latency.png}
+\caption{Average Latency Comparison}
+\label{fig:avg_latency}
 \end{figure}
 
 \subsection{Scalability Results}
 
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{../images/scalability_results.png}
-    \caption{Scalability Analysis Under Varying Workloads}
+\centering
+\includegraphics[width=0.8\textwidth]{images/Scalability.png}
+\caption{Scalability Analysis}
+\label{fig:scalability}
 \end{figure}
 
-\subsection{Resource Utilization}
 
-Distributed System:
-- CPU Usage: [Data]\%
-- Memory Usage: [Data]\%
-- Network I/O: [Data] MB/s
-
-Centralized System:
-- CPU Usage: [Data]\%
-- Memory Usage: [Data]\%
-- Network I/O: [Data] MB/s
 
 \subsection{Performance Analysis}
 % Analyze and interpret the results
-The distributed architecture shows ??? performance characteristics compared to centralized processing. Key findings include ??? overhead from MPI communication and container orchestration, versus ??? benefits from parallel processing capabilities.
+The distributed architecture shows significantly inferior performance characteristics compared to centralized processing across all measured metrics. Experimental results demonstrate that the distributed system consistently underperforms the centralized baseline by factors of 50-140x in throughput and 100-160x in latency measurements.
+
+\textbf{Throughput Analysis Findings:}
+The centralized system achieves throughput ranging from 7,153 Mb/s to 11,773 Mb/s across workload sizes, while the distributed system delivers only 50-165 Mb/s. This represents a dramatic performance penalty where the distributed approach processes less than 2\% of the centralized system's data volume. The performance gap actually widens with larger workloads, indicating that distributed overhead scales poorly compared to centralized efficiency gains.
+
+\textbf{Latency Impact Assessment:}
+Response time measurements reveal even more pronounced distributed system limitations. Centralized processing maintains sub-millisecond response times (0.002-0.897ms) while distributed processing requires 0.332-64ms per operation. The 100-160x latency increase directly reflects the communication overhead dominating actual computation time for simple arithmetic operations.
+
+\textbf{Communication Overhead Dominance:}
+Key findings include substantial overhead from MPI communication and container orchestration that completely overshadows any potential parallel processing benefits. The distributed system's performance bottleneck stems from network round-trip times, inter-container communication latency, and MPI message passing overhead that requires hundreds of times longer than the underlying arithmetic operations.
+
+\textbf{Scalability Characteristics:}
+Contrary to typical distributed system expectations, the centralized approach demonstrates superior scalability. Local throughput improves 65\% from small to large workloads (7,153 → 11,773 Mb/s), while distributed throughput shows inconsistent scaling with only 224\% improvement (50 → 165 Mb/s). This indicates that for computationally simple operations, centralized systems achieve better resource utilization and scaling efficiency.
+
+\textbf{Architectural Performance Trade-offs:}
+The experimental results confirm that distributed benefits from parallel processing capabilities are completely negated by communication costs for lightweight computational tasks. The distributed architecture prioritizes learning objectives and distributed systems concept demonstration over performance optimization, making it educationally valuable while being computationally inefficient for simple arithmetic workloads.
+
+The performance analysis validates that distributed systems excel in scenarios requiring complex computations where processing time exceeds communication overhead, but prove counterproductive for simple operations where network costs dominate total execution time.
+
 
 
 \section{System Design Trade-offs}
@@ -453,18 +483,18 @@ The distributed architecture shows ??? performance characteristics compared to c
 
 \subsubsection{Advantages of Distributed Design}
 \begin{itemize}
-    \item \textbf{Scalability:} 
-    \item \textbf{Fault Tolerance:} 
-    \item \textbf{Performance:} 
-    \item \textbf{Resource Distribution:} 
+    \item \textbf{Scalability:} Parallel processing capabilities enable concurrent handling of multiple operation types across specialized nodes
+    \item \textbf{Fault Tolerance:} Node isolation prevents single points of failure from affecting the entire system
+    \item \textbf{Performance:} Workload distribution and parallel execution for complex computational tasks
+    \item \textbf{Resource Distribution:} Efficient utilization of multiple computing resources across network infrastructure
 \end{itemize}
 
 \subsubsection{Disadvantages of Distributed Design}
 \begin{itemize}
-    \item \textbf{Complexity:} 
-    \item \textbf{Network Overhead:} 
-    \item \textbf{Consistency Challenges:} 
-    \item \textbf{Debugging Difficulty:} 
+    \item \textbf{Complexity:} Increased system complexity in deployment, coordination, and debugging processes
+    \item \textbf{Network Overhead:} Communication latency and MPI message passing costs dominate simple computations
+    \item \textbf{Consistency Challenges:} Synchronization requirements and result validation across distributed nodes
+    \item \textbf{Debugging Difficulty:} Multi-node troubleshooting complexity and distributed error isolation challenges
 \end{itemize}
 
 \subsection{Communication Model Trade-offs}
@@ -535,19 +565,15 @@ However, the most critical development work—system architecture design, MPI co
 \section{Conclusion}
 
 \subsection{Project Summary}
-% Summarize the key achievements of the project
+This project successfully implemented a complete distributed arithmetic processing system comprising six containerized nodes communicating via MPI. The system fulfilled all functional requirements including distributed input processing, parallel arithmetic operations, fault-tolerant communication, synchronous result aggregation, performance monitoring, and scalable container orchestration. The Docker-based deployment demonstrated practical distributed systems concepts while providing comprehensive performance evaluation against centralized alternatives.
 
 \subsection{Performance Insights}
-% Summarize key performance findings
+Experimental results reveal that communication overhead dominates computational benefits for simple arithmetic operations, with the distributed system underperforming centralized processing by 50-140x in throughput and 100-160x in latency. Network round-trip times and MPI message passing costs completely overshadow arithmetic computation time, demonstrating that distributed architectures prove counterproductive when communication overhead exceeds processing complexity. The findings validate that distributed systems excel for computationally intensive workloads but become inefficient for lightweight operations.
 
 \subsection{Design Lessons}
-% Key lessons learned about distributed system design
+The project highlighted critical trade-offs between educational objectives and performance optimization in distributed system design. Key lessons include the importance of matching system architecture to workload characteristics, understanding when centralized solutions outperform distributed alternatives, and recognizing that containerized MPI deployments introduce significant but manageable complexity. The implementation successfully demonstrated distributed systems principles while revealing the practical constraints that determine when distributed architectures provide genuine benefits versus educational value.
 
-\subsection{Future Work}
-% Potential improvements and extensions
 
-\subsection{Final Reflections}
-% Overall reflections on the project experience
 
 % References
 \newpage
@@ -557,6 +583,6 @@ However, the most critical development work—system architecture design, MPI co
 
 [2] Docker Documentation. Available: https://docs.docker.com/
 
-[3] Add your references here as needed
+
 
 \end{document}
