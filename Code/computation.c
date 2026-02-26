@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <mpi.h>
+#include <time.h>
 
 #include "tags.h"
 
@@ -33,7 +34,9 @@ int main (int argc, char *argv[]) {
     MPI_Init(&argc, &argv);
     double time = -MPI_Wtime();
     
+#if PRINTS_COMP
     printf("Computation node started - ready to process operations\n");
+#endif
 
     run();
     

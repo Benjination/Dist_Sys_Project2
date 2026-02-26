@@ -39,6 +39,13 @@ COPY user_Interface.c .
 COPY computation.c .
 COPY display.c .
 COPY test_data.csv .
+COPY test_data_48.csv .
+COPY test_data_500.csv .
+COPY test_data_1000.csv .
+COPY test_data_30000.csv .
+COPY test_data_inorder_48.csv .
+COPY test_data_inorder_500.csv .
+COPY test_data_inorder_1000.csv .
 COPY mpi_launcher.sh .
 COPY tags.h .
 
