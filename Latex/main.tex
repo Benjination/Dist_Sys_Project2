@@ -240,10 +240,86 @@ The system is fully containerized using Docker with Docker Compose orchestration
 % Detail your MPI service definitions and implementation
 
 \subsection{Dockerization Strategy}
-% Explain how each node is containerized
+
+The distributed arithmetic processing system employs Docker containerization to achieve node isolation and simulate realistic distributed computing environments. While Docker was required for the assignment, it proved to be excellent practice in building distributed systems, as the isolation of each node was very clear using Docker, simulating how the system would actually work on six separate computing devices.
+
+\textbf{Base Image Selection and Configuration}
+
+Ubuntu 22.04 serves as the base image, providing stable OpenMPI packages, reliable SSH server capabilities, and a comprehensive C compiler toolchain. This LTS release offers broad hardware compatibility and extensive documentation for distributed computing environments, making it ideal for MPI-based systems.
+
+\textbf{MPI Environment Setup}
+
+The Docker containers require specific MPI configurations to enable inter-container communication. Each container includes OpenMPI runtime installation, hostfile configuration for node discovery, and proper MPI environment variables. Communication utilizes MPI\_Send and MPI\_Recv operations with specific tags (ALU, COUNT, RESULT, TERMINATE) and MPI\_ANY\_SOURCE for flexible result collection across the computation nodes.
+
+\textbf{SSH Communication Infrastructure}
+
+SSH connectivity between containers enables MPI's distributed process spawning. The Dockerfile generates SSH keys during image build, configures passwordless authentication, enables root SSH access, sets up authorized\_keys, and disables strict host key checking. Each container starts an SSH daemon, creating trust relationships within the controlled network environment.
+
+\textbf{Network Architecture}
+
+The system employs a custom bridge network with static IP assignments (172.30.0.11-172.30.0.16) to provide predictable networking for MPI hostfile configuration. This approach avoids DNS resolution delays, enables consistent container-to-container communication, and supports reliable SSH connections while isolating the distributed system from other Docker networks.
+
+\textbf{Volume Management and Result Persistence}
+
+A shared results directory volume mount allows the display node to write computation\_results.csv to the host filesystem, enabling result persistence after container shutdown. This configuration provides easy access to output files for analysis and supports data collection for performance evaluation.
+
+\textbf{Privileged Container Requirements}
+
+The containers require privileged mode because MPI processes have to be run as root, which must be specified in the program call from terminal. Privileged mode enables MPI process spawning across containers, unrestricted SSH daemon operation, network configuration capabilities, and shared memory access. The --allow-run-as-root flag specifically addresses OpenMPI's safety restrictions in containerized environments.
+
+\textbf{Container Orchestration with Docker Compose}
+
+Docker Compose gives each node an individual identifier that coordinates message transference node to node. The orchestration framework manages multi-container dependencies, provides consistent networking configuration, enables single-command deployment and teardown, handles volume mounting automatically, and manages the entire container lifecycle. Without Docker Compose, manual container creation, network setup, and volume management would significantly complicate deployment.
+
+\textbf{Automated Build Process}
+
+During Docker image creation, source files are copied to the /app directory and compiled using mpicc commands: \texttt{mpicc -o user\_interface user\_Interface.c}, \texttt{mpicc -o computation computation.c}, and \texttt{mpicc -o display display.c}. The build process makes executables executable and generates the hostfile automatically, ensuring consistent compilation across different environments.
+
+\textbf{Scalability Considerations}
+
+There could be as many nodes as there are algorithms in this system. The isolation and specific path limits the amount of unnecessary code if the same algorithms were in one large file. Adding computation nodes requires updating docker-compose.yml with new node entries, modifying the hostfile to include new nodes, adjusting MPI rank assignments in mpi\_launcher.sh, and updating load balancing logic in the user interface. The containerized approach makes horizontal scaling straightforward.
+
+\textbf{Performance Trade-offs}
+
+You lose performance, but you gain scalability. Containers add networking overhead and resource isolation costs, but provide deployment portability, consistent environments across different machines, easier testing capabilities, simplified dependency management, and failure isolation. For production high-performance computing, bare metal would offer better performance, while containers excel in development environments and mixed computing infrastructures.
+
+If we were actually creating a high-performance arithmetic system, there would have been better ways to connect the processes that did not require TCP/IP protocols, like connecting the nodes directly with high-speed connectors. However, a direct connection would limit geographical scaling, making the Docker approach more suitable for distributed deployments across diverse computing environments.
 
 \subsection{Node Architecture}
-% Describe the architecture of individual nodes
+
+Each node in the distributed system follows a identical foundational architecture with role-specific customizations that enable specialized processing capabilities. The standardized node design ensures consistent deployment and communication while allowing functional differentiation across the six-node topology.
+
+\textbf{Common Node Foundation}
+
+All nodes are built upon Ubuntu 22.04 Docker containers with identical base configurations. Each container includes OpenMPI runtime (version 4.1.2+), SSH daemon for inter-node communication, and the GCC compiler toolchain. The common foundation ensures consistent MPI behavior and eliminates environment-specific compatibility issues across the distributed system.
+
+Every node contains the complete compiled executable set (\texttt{user\_interface}, \texttt{computation}, \texttt{display}) but executes only the appropriate program based on its assigned MPI rank. This approach simplifies container image management and deployment while maintaining clear functional separation through the \texttt{mpi\_launcher.sh} script.
+
+\textbf{Node Specialization Architecture}
+
+\textbf{User Interface Node (Rank 0):} Functions as the system coordinator with dual input processing capabilities. Contains CSV parsing logic, interactive command-line interface, input validation routines, and intelligent request routing algorithms. Manages the complete request lifecycle from input collection through result notification, serving as the primary user interaction point.
+
+\textbf{Computation Nodes (Ranks 1-4):} Implement identical processing architecture with operation-specific routing logic. Each node runs the same computation executable but filters incoming requests based on operation type (addition, subtraction, multiplication, division). The internal architecture includes request receiving loops, arithmetic processing units, timing measurement systems, and result transmission capabilities.
+
+\textbf{Display Node (Rank 5):} Serves as the centralized aggregation and analytics engine. Contains result collection mechanisms, statistical analysis algorithms, CSV output generation, and coordinated shutdown logic. Implements comprehensive result validation and maintains complete computational audit trails.
+
+\textbf{Resource Allocation and Constraints}
+
+Each container operates with minimal resource constraints to simulate realistic deployment scenarios. Memory allocation is limited to host system availability with no explicit container limits, allowing for realistic performance evaluation. CPU allocation follows Docker's default scheduling with no specialized affinity settings, providing fair resource distribution across the six-node deployment.
+
+Network bandwidth is constrained by Docker's bridge networking implementation, introducing realistic communication overhead that reflects distributed system performance characteristics. Storage allocation utilizes shared volume mounts for result persistence while maintaining individual container file system isolation.
+
+\textbf{Internal Communication Architecture}
+
+Node-internal communication operates through standard function calls and shared memory structures, maintaining optimal performance for local operations. The ComputationResult struct serves as the primary data container throughout each node's processing pipeline, ensuring consistent data formatting and eliminating serialization overhead for local operations.
+
+Inter-node communication utilizes MPI point-to-point messaging with blocking send/receive semantics. Each node maintains dedicated communication channels for different message types, enabling concurrent handling of computation requests, result transmissions, and control signals without interference.
+
+\textbf{Processing Workflow and State Management}
+
+Each node follows a standardized state machine model: initialization, active processing, and graceful termination. During initialization, nodes establish MPI communication, configure local environments, and enter listening states for incoming messages. The active processing phase implements role-specific logic while maintaining consistent timing and error handling.
+
+Graceful termination ensures proper resource cleanup and result persistence. Computation nodes respond to termination signals by completing active computations and updating status indicators. The display node implements a comprehensive shutdown sequence that validates result completeness before terminating the entire system.
 
 \begin{figure}[H]
     \centering
